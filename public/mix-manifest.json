@@ -1,0 +1,14 @@
+{
+    "/js/script.js": "/js/script.js",
+    "/js/view/brand.min.js": "/js/view/brand.min.js",
+    "/js/view/category.min.js": "/js/view/category.min.js",
+    "/js/view/dashboard.min.js": "/js/view/dashboard.min.js",
+    "/js/view/order.min.js": "/js/view/order.min.js",
+    "/js/view/product.min.js": "/js/view/product.min.js",
+    "/js/view/received-note.min.js": "/js/view/received-note.min.js",
+    "/js/view/user.min.js": "/js/view/user.min.js",
+    "/css/admin.css": "/css/admin.css",
+    "/js/lib/bootstrap.bundle.min.js": "/js/lib/bootstrap.bundle.min.js",
+    "/js/lib/date-picker.min.js": "/js/lib/date-picker.min.js",
+    "/js/lib/jquery-3.5.0.min.js": "/js/lib/jquery-3.5.0.min.js"
+}

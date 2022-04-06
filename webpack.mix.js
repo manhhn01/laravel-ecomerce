@@ -1,4 +1,6 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
+const fs = require("fs");
+const path = require("path")
 
 /*
  |--------------------------------------------------------------------------
@@ -11,7 +13,21 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+mix.styles(
+    [
+        "resources/css/bootstrap.css",
+        "resources/css/date-picker-bootstrap.css",
+        "resources/css/responsive.css",
+        "resources/css/ui.css",
+    ],
+    "public/css/admin.css"
+).copyDirectory("resources/fonts", "public/fonts")
+.copyDirectory("resources/js/lib", "public/js/lib")
+.js("resources/js/script.js", "public/js");
+
+fs.readdirSync("resources/js/view").forEach((file) => {
+    mix.js(
+        `resources/js/view/${file}`,
+        `public/js/view/${path.parse(file).name}.min.js`
+    );
+});
