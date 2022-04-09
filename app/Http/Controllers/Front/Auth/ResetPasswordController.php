@@ -89,7 +89,7 @@ class ResetPasswordController extends Controller
 
     protected function resetCodeCheck($attributes)
     {
-        $passwordReset = DB::table('password_resets')->where('email', $attributes['email'])->first();
+        $passwordReset = DB::table('password_resets')->where('email', $attributes['email'])->latest()->first();
         if (!Hash::check($attributes['reset_code'], $passwordReset->reset_code)) {
             throw new InvalidResetCode([
                 'token.match' => 'Your password reset code is not match our records',
