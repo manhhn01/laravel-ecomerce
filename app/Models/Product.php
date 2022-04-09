@@ -12,6 +12,8 @@ class Product extends Model
         'name', 'slug', 'description', 'status'
     ];
 
+    protected $appends = ['cover'];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -47,8 +49,13 @@ class Product extends Model
         return $this->morphMany(ProductImage::class, 'imageable');
     }
 
-    public function cover()
+    public function getCoverAttribute()
     {
-        return $this->images()->where('type', 'cover')->limit(1);
+        return $this->images()->where('type', 'cover')->first('image');
     }
+
+    // public function cover()
+    // {
+    //     return $this->images()->where('type', 'cover');
+    // }
 }

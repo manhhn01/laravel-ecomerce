@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
                 )
                 ->has(ProductImage::factory(3), 'images')
                 ->has(ProductImage::factory([
-                    'image' => $productData['images'],
+                    'image' => $productData['image'],
                     'type' => 'cover'
                 ]), 'images')
                 ->has(
