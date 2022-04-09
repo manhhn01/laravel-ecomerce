@@ -15,7 +15,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        return Product::limit($request->query('limit') ?? 100)
+        return Product::where('status', 1)
+            ->limit($request->query('limit') ?? 100)
             ->offset($request->query('start') ?? 0)
             ->with(['images', 'cover'])->get();
     }

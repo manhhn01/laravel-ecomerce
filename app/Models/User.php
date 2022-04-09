@@ -22,7 +22,8 @@ class User extends Authenticatable
         'email',
         'gender',
         'password',
-        'role_id'
+        'dob',
+        'phone',
     ];
 
     /**
@@ -47,4 +48,8 @@ class User extends Authenticatable
     protected $attributes = [
         'avatar' => 'images/users/default-user.png'
     ];
+
+    public function getAvatarAttribute($value){
+        return asset("storage/$value");
+    }
 }
