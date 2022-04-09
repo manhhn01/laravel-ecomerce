@@ -18,7 +18,7 @@ class ProductController extends Controller
         return Product::where('status', 1)
             ->limit($request->query('limit') ?? 100)
             ->offset($request->query('start') ?? 0)
-            ->with('images')->get();
+            ->with('images', 'cover', 'category:id,parent_id,slug,name', 'brand:id,slug,name')->get();
     }
 
     /**
