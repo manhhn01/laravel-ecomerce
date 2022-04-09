@@ -139,7 +139,7 @@
                                                             <td style="width:100%;padding-right:0;padding-left:0">
                                                                 <div align="center" style="line-height:10px">
                                                                     <a href="www.example.com" style="outline:none" tabindex="-1" target="_blank"><img alt="Image of lock & key." class="big"
-                                                                            src="/storage/images/mail/___passwordreset.gif" style="display:block;height:auto;border:0;width:640px;max-width:100%"
+                                                                            src="{{asset("/storage/images/mail/___passwordreset.gif")}}" style="display:block;height:auto;border:0;width:640px;max-width:100%"
                                                                             title="Image of lock & key." width="640" /></a>
                                                                 </div>
                                                             </td>
@@ -240,7 +240,7 @@
                                                         <tr>
                                                             <td style="width:100%;padding-right:0;padding-left:0">
                                                                 <div align="center" style="line-height:10px"><a href="{{ config('app.url') }}" style="outline:none;" tabindex="-1"
-                                                                        target="_blank"><img alt="{{ config('app.name') }}" src="/storage/logo.png"
+                                                                        target="_blank"><img alt="{{ config('app.name') }}" src="{{asset("/storage/images/logo.png")}}"
                                                                             style="display:block;height:auto;border:0;width:86px;max-width:100%" title="{{ config('app.name') }}" /></a></div>
                                                             </td>
                                                         </tr>
@@ -253,16 +253,16 @@
                                                                     style="mso-table-lspace:0;mso-table-rspace:0" width="208px">
                                                                     <tr>
                                                                         <td style="padding:0 10px 0 10px"><a href="https://www.facebook.com/" target="_blank"><img alt="Facebook" height="32"
-                                                                                    src="/storage/images/mail/facebook2x.png" style="display:block;height:auto;border:0" title="Facebook"
+                                                                                    src="{{asset("/storage/images/mail/facebook2x.png")}}" style="display:block;height:auto;border:0" title="Facebook"
                                                                                     width="32" /></a></td>
                                                                         <td style="padding:0 10px 0 10px"><a href="https://twitter.com/" target="_blank"><img alt="Twitter" height="32"
-                                                                                    src="/storage/images/mail/twitter2x.png" style="display:block;height:auto;border:0" title="Twitter"
+                                                                                    src="{{asset("/storage/images/mail/twitter2x.png")}}" style="display:block;height:auto;border:0" title="Twitter"
                                                                                     width="32" /></a></td>
                                                                         <td style="padding:0 10px 0 10px"><a href="https://instagram.com/" target="_blank"><img alt="Instagram" height="32"
-                                                                                    src="/storage/images/mail/instagram2x.png" style="display:block;height:auto;border:0" title="Instagram"
+                                                                                    src="{{asset("/storage/images/mail/instargram2x.png")}}" style="display:block;height:auto;border:0" title="Instagram"
                                                                                     width="32" /></a></td>
                                                                         <td style="padding:0 10px 0 10px"><a href="https://www.linkedin.com/" target="_blank"><img alt="LinkedIn" height="32"
-                                                                                    src="/storage/images/mail/linkedin2x.png" style="display:block;height:auto;border:0" title="LinkedIn"
+                                                                                    src="{{asset("/storage/images/mail/linkein2x.png")}}" style="display:block;height:auto;border:0" title="LinkedIn"
                                                                                     width="32" /></a></td>
                                                                     </tr>
                                                                 </table>

@@ -18,7 +18,7 @@
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
             <a href="{{ route('admin.dashboard') }}" class="brand-wrap">
-                <img src="{{ asset('storage/logo.png') }}" height="42" class="logo" alt="{{ config('app.name') }}" />
+                <img src="{{ asset('storage/image/logo.png') }}" height="42" class="logo" alt="{{ config('app.name') }}" />
             </a>
             <div>
                 <button class="btn btn-icon btn-aside-minimize">
