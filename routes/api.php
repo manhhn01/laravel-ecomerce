@@ -25,13 +25,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('guest')->group(function () {
-    Route::post('/register', [RegisterController::class, 'register']);
-    Route::post('/login', [LoginController::class, 'login']);
-    Route::post('/forgot', [ResetPasswordController::class, 'sendResetMail']);
-    Route::post('/reset_password/verify', [ResetPasswordController::class, 'verifyCode']);
-    Route::post('/reset_password', [ResetPasswordController::class, 'resetPassword']);
-});
-
+Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/forgot', [ResetPasswordController::class, 'sendResetMail']);
+Route::post('/reset_password/verify', [ResetPasswordController::class, 'verifyCode']);
+Route::post('/reset_password', [ResetPasswordController::class, 'resetPassword']);
 
 Route::get('products', [Front\ProductController::class, 'index']);

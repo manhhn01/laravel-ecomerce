@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Front\Auth;
 use App\Exceptions\InvalidResetCode;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Mail\Front\ResetPassword;
+use App\Mail\Front\ResetPasswordMail;
 use App\Models\User;
 use Carbon\Carbon;
 use DB;
@@ -22,7 +22,8 @@ class ResetPasswordController extends Controller
         ]);
 
         $resetCode = strtoupper(Str::random(6));
-        DB::table('password_resets')->updateOrInsert([
+        DB::table('password_resets')->where('email', $request->email)->delete();
+        DB::table('password_resets')->insert([
             'email' => $request->email,
             'reset_code' => Hash::make($resetCode),
             'created_at' => now(),
@@ -30,7 +31,7 @@ class ResetPasswordController extends Controller
         ]);
 
         Mail::to($request->email)
-            ->send(new ResetPassword($resetCode));
+            ->queue(new ResetPasswordMail($resetCode));
 
         return response()->json([
             'message'=>'Please check your email for password reset code.'
