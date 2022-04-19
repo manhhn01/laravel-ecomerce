@@ -29,3 +29,4 @@ Route::middleware('throttle:verify_code')->post('/reset_password/verify', [Reset
 Route::middleware('throttle:verify_code')->post('/reset_password', [ResetPasswordController::class, 'resetPassword']);
 
 Route::get('/products', [Front\ProductController::class, 'index']);
+Route::get('/products/{product}', [Front\ProductController::class, 'show']);

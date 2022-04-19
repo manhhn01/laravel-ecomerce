@@ -18,9 +18,10 @@ class CreateProductVariantsTable extends Migration
 
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('sku')->unique();
-            $table->decimal('price', 15, 2);
-            $table->decimal('sale_price', 15, 2)->nullable();
             $table->smallInteger('quantity');
+
+            $table->foreignId('color_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('size_id')->nullable()->constrained()->nullOnDelete();
 
             $table->timestamps();
         });

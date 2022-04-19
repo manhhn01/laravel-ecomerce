@@ -14,10 +14,17 @@ class ProductVariant extends Model
         'sku', 'price', 'sale_price', 'quantity'
     ];
 
-    public function options()
-    {
-        return $this->belongsToMany(ProductOption::class, 'product_variant_option');
-    }
+    protected $with = [
+        'color', 'size'
+    ];
+
+    protected $hidden = [
+        'product_id',
+        'color_id',
+        'size_id',
+        'created_at',
+        'updated_at'
+    ];
 
     public function orders()
     {
@@ -26,18 +33,16 @@ class ProductVariant extends Model
 
     public function image()
     {
-        return $this->morphOne(ProductImage::class, 'imageable', 'VariantImage');
+        return $this->morphOne(ProductImage::class, 'imageable');
     }
 
-    public function getPriceAttribute($value){
-        return $this->priceFormat($value);
+    public function size()
+    {
+        return $this->belongsTo(Size::class);
     }
 
-    public function getSalePriceAttribute($value){
-        return $this->priceFormat($value);
-    }
-
-    protected function priceFormat($value){
-        return (!empty($value)) ? number_format($value, 0, ',', '.') : $value;
+    public function color()
+    {
+        return $this->belongsTo(Color::class);
     }
 }

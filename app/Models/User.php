@@ -26,6 +26,10 @@ class User extends Authenticatable
         'phone',
     ];
 
+    protected $appends = [
+        'full_name'
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -51,5 +55,9 @@ class User extends Authenticatable
 
     public function getAvatarAttribute($value){
         return asset("storage/$value");
+    }
+
+    public function getFullNameAttribute($value){
+        return $this->first_name.' '.$this->last_name;
     }
 }

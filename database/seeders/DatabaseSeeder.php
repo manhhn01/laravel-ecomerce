@@ -4,11 +4,12 @@ namespace Database\Seeders;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 use App\Models\ProductImage;
-use App\Models\ProductOption;
 use App\Models\ProductVariant;
 use App\Models\Review;
+use App\Models\Size;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -23,15 +24,21 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(CategorySeeder::class);
         $this->call(BrandSeeder::class);
+        $this->call(ColorSeeder::class);
+        $this->call(SizeSeeder::class);
 
         User::factory(10)->create();
         User::factory()->create([
             'email' => 'admin@gmail.com',
             'role_id' => '0'
         ]);
+
         $customer = User::factory(['role_id' => 1])->create();
         $categories = Category::all();
         $brands = Brand::all();
+        $colors = Color::all();
+        $sizes = Size::all();
+
         $products = [];
 
         // READ PRODUCTS.JSON
@@ -42,10 +49,9 @@ class DatabaseSeeder extends Seeder
             $products[] = Product::factory(['name' => $productData['name']])
                 ->has(
                     ProductVariant::factory(3)
-                        ->has(
-                            ProductOption::factory(2),
-                            'options'
-                        ),
+                        ->for($sizes->random())
+                        ->for($colors->random())
+                        ->has(ProductImage::factory(), 'image'),
                     'variants'
                 )
                 ->has(ProductImage::factory(3), 'images')
@@ -66,10 +72,8 @@ class DatabaseSeeder extends Seeder
             $products[] = Product::factory(['name' => $productData['name']])
                 ->has(
                     ProductVariant::factory()
-                        ->has(
-                            ProductOption::factory(2),
-                            'options'
-                        ),
+                        ->for($sizes->random())
+                        ->for($colors->random()),
                     'variants'
                 )
                 ->has(ProductImage::factory(3), 'images')

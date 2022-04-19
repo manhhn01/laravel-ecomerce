@@ -274,7 +274,7 @@ namespace App\Models{
  * @property string $value
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\ProductOptionFactory factory(...$parameters)
+ * @method static \Database\Factories\ColorFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|ProductOption newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProductOption newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProductOption query()

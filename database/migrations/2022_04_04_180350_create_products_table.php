@@ -18,7 +18,9 @@ class CreateProductsTable extends Migration
 
             $table->string('name')->fulltext();
             $table->string('slug')->unique();
-            $table->string('description');
+            $table->decimal('price', 15, 2);
+            $table->decimal('sale_price', 15, 2)->nullable();
+            $table->text('description');
             $table->tinyInteger('status');
 
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();

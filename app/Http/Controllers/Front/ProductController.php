@@ -24,7 +24,8 @@ class ProductController extends Controller
         return $this->productRepo->wherePublic()
             ->limit($request->query('limit') ?? 100)
             ->offset($request->query('start') ?? 0)
-            ->with('category:id,parent_id,slug,name', 'brand:id,slug,name')->get();
+            ->withCount('publicReviews')
+            ->get();
     }
 
     /**
@@ -51,12 +52,14 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        //
+        return $product
+            ->load('images', 'category:id,parent_id,slug,name', 'brand:id,slug,name', 'publicReviews', 'variants.image')
+            ->loadCount('publicReviews');
     }
 
     /**

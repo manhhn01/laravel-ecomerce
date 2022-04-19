@@ -14,15 +14,11 @@ class Product extends Model
         'name', 'slug', 'description', 'status'
     ];
 
-    protected $appends = [
-        'price',
-        'sale_price',
-        'rating'
-    ];
+    protected $appends = ['rating'];
 
-    protected $with = ['variants:id,product_id,price,sale_price', 'cover'];
+    protected $with = ['cover'];
 
-    protected $hidden = ['variants'];
+    protected $hidden = ['category_id', 'brand_id'];
 
     public function category()
     {
@@ -44,14 +40,14 @@ class Product extends Model
         return $this->hasMany(ProductVariant::class);
     }
 
-    public function options()
-    {
-        return $this->hasManyThrough(ProductOption::class, ProductVariant::class);
-    }
-
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function publicReviews()
+    {
+        return $this->hasMany(Review::class)->status(1);
     }
 
     public function images()
@@ -67,43 +63,31 @@ class Product extends Model
     /**
      * @return string
      */
-    public function getPriceAttribute()
+    public function getPriceAttribute($value)
     {
-        if (!$this->hasManyVariants()) {
-            return $this->variants()->first()->price . " đ";
-        } else {
-            $prices = collect();
-            $this->variants->each(function ($variant) use ($prices) {
-                $prices->push($variant->price, $variant->sale_price);
-            });
-            return "{$prices->min()} đ - {$prices->max()} đ";
-        }
+        return $this->priceFormat($value) . ' đ';
     }
 
     /**
      * @return string
      */
-    public function getSalePriceAttribute()
+    public function getSalePriceAttribute($value)
     {
-        if (!$this->hasManyVariants()) {
-            return $this->variants->first()->sale_price;
-
-        }
-    }
-
-    public function getRatingAttribute(){
-        return round_down($this->reviews()->status(1)->avg('rating'), 0.5);
+        return $this->priceFormat($value) . ' đ';
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function hasManyVariants()
+
+    public function getRatingAttribute()
     {
-        if ($this->variants->count() > 1) {
-            return true;
-        }
-        return false;
+        return round_down($this->reviews()->status(1)->avg('rating'), 0.5);
+    }
+
+    protected function priceFormat($value)
+    {
+        return (!empty($value)) ? number_format($value, 0, ',', '.') : $value;
     }
 
     public function toSearchableArray()
