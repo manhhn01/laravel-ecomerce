@@ -132,5 +132,5 @@
 @endsection
 
 @push('js')
-    <script src="{{ asset('js/order.js') }}"></script>
+    <script src="{{ asset('js/view/order.min.js') }}"></script>
 @endpush

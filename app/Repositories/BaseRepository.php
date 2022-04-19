@@ -23,7 +23,7 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function all()
     {
-        return $this->model->get();
+        return $this->model->all();
     }
 
     public function find($id)
@@ -50,12 +50,13 @@ abstract class BaseRepository implements RepositoryInterface
         $model->delete();
     }
 
-    public function page($amount, $filter = null)
+    public function page($perPage, $search = null, $status = null)
     {
-        if (isset($filter)) {
-            return $this->model->latest()->ofType($filter)->paginate($amount);
-        } else {
-            return $this->model->latest()->paginate($amount);
+        if(isset($search)){
+            return $this->model->search($search)->orderBy('created_at', 'desc')->where('status', $status)->paginate($perPage);
+        }
+        else {
+            return $this->model->latest()->status($status)->paginate($perPage);
         }
     }
 

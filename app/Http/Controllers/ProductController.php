@@ -3,18 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Repositories\Brands\BrandRepositoryInterface;
+use App\Repositories\Categories\CategoryRepositoryInterface;
+use App\Repositories\Products\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    protected $productRepo;
+    protected $categoryRepo;
+    protected $brandRepo;
+
+    public function __construct(
+        ProductRepositoryInterface $product,
+        CategoryRepositoryInterface $category,
+        BrandRepositoryInterface $brand
+    ) {
+        $this->productRepo = $product;
+        $this->categoryRepo = $category;
+        $this->brandRepo = $brand;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $products = $this->productRepo->page(100, $request->query('search'), $request->query('status'));
+
+        return view(
+            'admin.product.index',
+            ['products' => $products]
+        );
     }
 
     /**
@@ -24,7 +46,16 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $categories = $this->categoryRepo->all();
+        $brands = $this->brandRepo->all();
+
+        return view(
+            'admin.product.create',
+            [
+                'categories' => $categories,
+                'brands' => $brands,
+            ]
+        );
     }
 
     /**
@@ -35,7 +66,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**

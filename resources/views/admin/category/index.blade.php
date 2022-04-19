@@ -70,5 +70,5 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('js/category.js') }}"></script>
+<script src="{{ asset('js/view/category.min.js') }}"></script>
 @endpush

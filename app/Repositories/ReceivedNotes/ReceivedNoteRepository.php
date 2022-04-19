@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\ReceivedNote;
+namespace App\Repositories\ReceivedNotes;
 
 use App\Models\Product;
 use App\Models\ReceivedNote;

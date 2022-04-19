@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Front\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\LoginRequest;
 use App\Models\User;
-use Dotenv\Exception\ValidationException;
 use Hash;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {

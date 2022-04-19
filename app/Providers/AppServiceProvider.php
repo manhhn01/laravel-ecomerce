@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use View;
 
@@ -26,5 +27,8 @@ class AppServiceProvider extends ServiceProvider
     {
         /* VIEW SHARE */
         View::share('user_avatar', optional(auth()->user())->avatar ?: 'images/users/default-user.png');
+
+        /* PAGINATOR */
+        Paginator::useBootstrap();
     }
 }

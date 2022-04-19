@@ -6,6 +6,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Models\ReceivedNote;
@@ -66,7 +67,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    // dd(auth()->user());
+    // return (App\Models\Product::first());
 });
 
 // OTHERS

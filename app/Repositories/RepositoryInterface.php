@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 interface RepositoryInterface
@@ -40,12 +41,12 @@ interface RepositoryInterface
     public function delete($id);
 
     /**
-     * Return pagination with filter.
-     * @param $amount
-     * @param null $filter
-     * @return mixed
+     * @param int $perPage
+     * @param string $search
+     * @param int $status
+     * @return LengthAwarePaginator
      */
-    public function page($amount, $filter);
+    public function page($perPage, $search, $status);
 
     /**
      * Get latest model

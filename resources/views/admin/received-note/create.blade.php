@@ -44,5 +44,5 @@
 @endsection
 
 @push('js')
-    <script src="{{ asset('js/receive-note.js') }}"></script>
+    <script src="{{ asset('js/view/receive-note.min.js') }}"></script>
 @endpush

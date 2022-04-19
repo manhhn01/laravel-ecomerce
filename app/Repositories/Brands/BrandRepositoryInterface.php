@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repositories\Supplier;
+namespace App\Repositories\Brands;
 
 use App\Repositories\RepositoryInterface;
 
-interface SupplierRepositoryInterface extends RepositoryInterface
+interface BrandRepositoryInterface extends RepositoryInterface
 {
     /**
      * return products paginate.

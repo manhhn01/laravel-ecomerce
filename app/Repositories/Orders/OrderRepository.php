@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Order;
+namespace App\Repositories\Orders;
 
 use App\Exceptions\ExpiredCouponException;
 use App\Exceptions\InvalidQuantityException;

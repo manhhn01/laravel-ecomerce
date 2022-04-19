@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\StatusScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-    use HasFactory;
-
-    use HasFactory;
+    use HasFactory, StatusScope;
 
     protected $fillable = [
-        'comment', 'vote', 'like', 'status'
+        'comment', 'rating', 'like', 'status'
     ];
 
     public function user()

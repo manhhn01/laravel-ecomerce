@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>@yield('title') LifeWear Admin</title>
     <link href="{{ asset('images/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.5/css/selectize.bootstrap4.min.css" integrity="sha512-VL5zQAJyFw5RL9wN3a5nF508dBqgOAYOZeww5RuEq8A8JQLiWy20iG2lLyiTuF6bv7gz48UGMcxuMlUycoHfJw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- custom style -->
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet" />
     <!-- iconfont -->
@@ -18,7 +19,7 @@
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
             <a href="{{ route('admin.dashboard') }}" class="brand-wrap">
-                <img src="{{ asset('storage/image/logo.png') }}" height="42" class="logo" alt="{{ config('app.name') }}" />
+                <img src="{{ asset('storage/images/logo.png') }}" height="42" class="logo" alt="{{ config('app.name') }}" />
             </a>
             <div>
                 <button class="btn btn-icon btn-aside-minimize">
@@ -36,38 +37,38 @@
                     </a>
                 </li>
                 @if (auth()->user()->role == 0)
-                    <li class="menu-item has-submenu {{ request()->is('product/*') ? 'active' : '' }}">
-                        <a class="menu-link" href="#">
-                            <i class="icon material-icons md-shopping_bag"></i>
-                            <span class="text">Sản phẩm</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="{{ route('admin.products.index') }}">Danh sách sản phẩm</a>
-                            <a href="{{ route('admin.products.index') }}">Thêm sản phẩm</a>
-                        </div>
-                    </li>
+                <li class="menu-item has-submenu {{ request()->is('product/*') ? 'active' : '' }}">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Sản phẩm</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="{{ route('admin.products.index') }}">Danh sách sản phẩm</a>
+                        <a href="{{ route('admin.products.index') }}">Thêm sản phẩm</a>
+                    </div>
+                </li>
 
-                    <li class="menu-item has-submenu {{ request()->is('category/*') ? 'active' : '' }}">
-                        <a class="menu-link" href="#">
-                            <i class="icon material-icons md-local_offer"></i>
-                            <span class="text">Danh mục</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="{{ route('admin.categories.index') }}">Danh sách danh mục</a>
-                            <a href="{{ route('admin.categories.create') }}">Thêm danh mục</a>
-                        </div>
-                    </li>
+                <li class="menu-item has-submenu {{ request()->is('category/*') ? 'active' : '' }}">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Danh mục</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="{{ route('admin.categories.index') }}">Danh sách danh mục</a>
+                        <a href="{{ route('admin.categories.create') }}">Thêm danh mục</a>
+                    </div>
+                </li>
 
-                    <li class="menu-item has-submenu {{ request()->is('supplier/*') ? 'active' : '' }}">
-                        <a class="menu-link" href="#">
-                            <i class="icon material-icons md-watch"></i>
-                            <span class="text">Brand</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="{{ route('admin.brands.index') }}">Danh sách brand</a>
-                            <a href="{{ route('admin.brands.create') }}">Thêm brand</a>
-                        </div>
-                    </li>
+                <li class="menu-item has-submenu {{ request()->is('supplier/*') ? 'active' : '' }}">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-watch"></i>
+                        <span class="text">Brand</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="{{ route('admin.brands.index') }}">Danh sách brand</a>
+                        <a href="{{ route('admin.brands.create') }}">Thêm brand</a>
+                    </div>
+                </li>
                 @endif
                 <li class="menu-item has-submenu {{ request()->is('order/*') ? 'active' : '' }}">
                     <a class="menu-link" href="#">
@@ -81,33 +82,33 @@
                 </li>
 
                 @if (auth()->user()->role == 0)
-                    <li class="menu-item has-submenu {{ request()->is('coupon/*') ? 'active' : '' }}">
-                        <a class="menu-link" href="#">
-                            <i class="icon material-icons md-card_giftcard"></i>
-                            <span class="text">Mã giảm giá</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="{{ route('admin.coupons.index') }}">Danh sách mã giảm giá</a>
-                            <a href="{{ route('admin.coupons.create') }}">Thêm mã giảm giá</a>
-                        </div>
-                    </li>
+                <li class="menu-item has-submenu {{ request()->is('coupon/*') ? 'active' : '' }}">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-card_giftcard"></i>
+                        <span class="text">Mã giảm giá</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="{{ route('admin.coupons.index') }}">Danh sách mã giảm giá</a>
+                        <a href="{{ route('admin.coupons.create') }}">Thêm mã giảm giá</a>
+                    </div>
+                </li>
 
-                    <li class="menu-item has-submenu {{ request()->is('receive-note/*') ? 'active' : '' }}">
-                        <a class="menu-link" href="#">
-                            <i class="icon material-icons md-note"></i>
-                            <span class="text">Phiếu nhập</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="{{ route('admin.received-notes.index') }}">Danh sách phiếu nhập</a>
-                            <a href="{{ route('admin.received-notes.create') }}">Thêm phiếu nhập</a>
-                        </div>
-                    </li>
-                    <li class="menu-item {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">
-                        <a class="menu-link" href="{{ route('admin.users.index') }}">
-                            <i class=" icon material-icons md-account_circle"></i>
-                            <span class="text">Quản lý nhân viên</span>
-                        </a>
-                    </li>
+                <li class="menu-item has-submenu {{ request()->is('receive-note/*') ? 'active' : '' }}">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-note"></i>
+                        <span class="text">Phiếu nhập</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="{{ route('admin.received-notes.index') }}">Danh sách phiếu nhập</a>
+                        <a href="{{ route('admin.received-notes.create') }}">Thêm phiếu nhập</a>
+                    </div>
+                </li>
+                <li class="menu-item {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">
+                    <a class="menu-link" href="{{ route('admin.users.index') }}">
+                        <i class=" icon material-icons md-account_circle"></i>
+                        <span class="text">Quản lý nhân viên</span>
+                    </a>
+                </li>
                 @endif
             </ul>
         </nav>
@@ -130,14 +131,14 @@
                 <ul class="nav">
                     <li class="dropdown nav-item">
                         <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                            <img class="img-xs rounded-circle" src="{{ asset('storage/' . $user_avatar) }}" alt=""/>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Cài đặt</a>
-                            <form action="{{ route('admin.logout') }}" method="post">
-                                @csrf
-                                <button type="submit" class="dropdown-item text-danger">Đăng xuất</button>
-                            </form>
-                        </div>
+                            <img class="img-xs rounded-circle" src="{{ asset('storage/' . $user_avatar) }}" alt="" />
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#">Cài đặt</a>
+                                <form action="{{ route('admin.logout') }}" method="post">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger">Đăng xuất</button>
+                                </form>
+                            </div>
                     </li>
                 </ul>
             </div>
@@ -145,11 +146,11 @@
 
         <section class="content-main">
             @if (session('info'))
-                <div class="alert alert-info">{{ session('info') }}</div>
+            <div class="alert alert-info">{{ session('info') }}</div>
             @endif
 
             @if ($errors->any())
-                {!! implode('', $errors->all('<div class="alert alert-danger">:message</div>')) !!}
+            {!! implode('', $errors->all('<div class="alert alert-danger">:message</div>')) !!}
             @endif
 
             @yield('content-main')
@@ -158,6 +159,9 @@
 
     <script src="{{ asset('js/lib/jquery-3.5.0.min.js') }}"></script>
     <script src="{{ asset('js/lib/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microplugin/0.0.3/microplugin.min.js" integrity="sha512-7amIsiQ/hxbdPNawBZwmWBWPiwQRNEJlxTj6eVO+xmWd71fs79Iydr4rYARHwDf0rKHpysFxWbj64fjPRHbqfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sifter/0.5.4/sifter.min.js" integrity="sha512-B60IUvYpG4cibCeQ30J8k/+qtN+fxKAIENb3DL2DVdzIt76IDIynAt92chPEwlCuKejOt//+OZL61i1xsvCIDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.5/js/selectize.min.js" integrity="sha512-8MxMBA7Rt4u4Hub7fgUVqRm2XQxEUybzTK5D2KAKHfToOR/5+1Y3dll3U4rtnyleGdW0O5GG2wYGAp9ZaebsbQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Custom JS -->
     <script src="{{ asset('js/script.js') }}" type="text/javascript"></script>

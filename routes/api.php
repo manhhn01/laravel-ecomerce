@@ -1,10 +1,7 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\Front;
 use App\Http\Controllers\Front\Auth\LoginController;
 use App\Http\Controllers\Front\Auth\RegisterController;
@@ -27,8 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/forgot', [ResetPasswordController::class, 'sendResetMail']);
-Route::post('/reset_password/verify', [ResetPasswordController::class, 'verifyCode']);
-Route::post('/reset_password', [ResetPasswordController::class, 'resetPassword']);
+Route::middleware('throttle:email')->post('/forgot', [ResetPasswordController::class, 'sendResetMail']);
+Route::middleware('throttle:verify_code')->post('/reset_password/verify', [ResetPasswordController::class, 'verifyCode']);
+Route::middleware('throttle:verify_code')->post('/reset_password', [ResetPasswordController::class, 'resetPassword']);
 
-Route::get('products', [Front\ProductController::class, 'index']);
+Route::get('/products', [Front\ProductController::class, 'index']);

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\ReceivedNote;
+namespace App\Repositories\ReceivedNotes;
 
 use App\Repositories\RepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

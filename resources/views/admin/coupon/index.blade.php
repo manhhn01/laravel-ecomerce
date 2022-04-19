@@ -75,5 +75,5 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('js/coupon.js') }}"></script>
+<script src="{{ asset('js/view/coupon.min.js') }}"></script>
 @endpush

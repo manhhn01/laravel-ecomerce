@@ -115,5 +115,5 @@
 @endsection
 
 @push('js')
-    <script src="{{ asset('js/user.js') }}"></script>
+    <script src="{{ asset('js/view/user.min.js') }}"></script>
 @endpush

@@ -46,17 +46,17 @@ namespace App\Models{
  * @property string $name
  * @property string $slug
  * @property string|null $description
- * @property string $cover
+ * @property string $image
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Database\Factories\BrandFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Brand newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Brand newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Brand query()
- * @method static \Illuminate\Database\Eloquent\Builder|Brand whereCover($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Brand whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Brand whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Brand whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Brand whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Brand whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Brand whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Brand whereUpdatedAt($value)
@@ -71,7 +71,7 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property int $parent_id
+ * @property int|null $parent_id
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -88,6 +88,38 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereUpdatedAt($value)
  */
 	class Category extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Coupon
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $type
+ * @property int $value
+ * @property int|null $max_value
+ * @property int|null $remain
+ * @property string|null $description
+ * @property string $expire_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\CouponFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereExpireAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereMaxValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereRemain($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Coupon whereValue($value)
+ */
+	class Coupon extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -116,6 +148,25 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
  */
 	class Order extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\PasswordReset
+ *
+ * @property string $email
+ * @property string $reset_code
+ * @property string|null $created_at
+ * @property string|null $expire_at
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordReset newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordReset newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordReset query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordReset whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordReset whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordReset whereExpireAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordReset whereResetCode($value)
+ */
+	class PasswordReset extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -157,6 +208,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Brand|null $brand
  * @property-read \App\Models\Category|null $category
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coupon[] $coupon
+ * @property-read int|null $coupon_count
  * @property-read \App\Models\ProductImage|null $cover
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductImage[] $images
  * @property-read int|null $images_count
@@ -169,7 +222,9 @@ namespace App\Models{
  * @method static \Database\Factories\ProductFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Product newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Product newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product public()
  * @method static \Illuminate\Database\Eloquent\Builder|Product query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product unlisted()
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereBrandId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereCategoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereCreatedAt($value)
@@ -189,10 +244,12 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $image
+ * @property string|null $type
  * @property string $imageable_type
  * @property int $imageable_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $imageable
  * @method static \Database\Factories\ProductImageFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|ProductImage newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ProductImage newQuery()
@@ -202,6 +259,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|ProductImage whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProductImage whereImageableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProductImage whereImageableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductImage whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProductImage whereUpdatedAt($value)
  */
 	class ProductImage extends \Eloquent {}
@@ -264,6 +322,24 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\ReceivedNote
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\ReceivedNoteFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceivedNote newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceivedNote newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceivedNote query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceivedNote whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceivedNote whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceivedNote whereUpdatedAt($value)
+ */
+	class ReceivedNote extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Review
  *
  * @property int $id
@@ -311,6 +387,24 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
  */
 	class Role extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Statistic
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\StatisticFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic whereUpdatedAt($value)
+ */
+	class Statistic extends \Eloquent {}
 }
 
 namespace App\Models{

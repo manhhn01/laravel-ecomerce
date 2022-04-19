@@ -112,7 +112,7 @@
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="{{ asset('js/date-picker.min.js') }}"></script>
-    <script src="{{ asset('js/dashboard.js') }}"></script>
+    <script src="{{ asset('js/view/dashboard.js') }}"></script>
 @endpush
 
 @push('css')

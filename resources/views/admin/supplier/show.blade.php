@@ -59,5 +59,5 @@
 
 
 @push('js')
-    <script src="{{ asset('js/product.js') }}"></script>
+    <script src="{{ asset('js/view/product.min.js') }}"></script>
 @endpush

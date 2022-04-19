@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\Order\OrderRepositoryInterface;
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use App\Repositories\Orders\OrderRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
 
 class DashboardController extends Controller
 {

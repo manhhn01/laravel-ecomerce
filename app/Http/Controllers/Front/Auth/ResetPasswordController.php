@@ -4,26 +4,37 @@ namespace App\Http\Controllers\Front\Auth;
 
 use App\Exceptions\InvalidResetCode;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Front\ResetPasswordRequest;
+use App\Http\Requests\Front\SendResetMailRequest;
+use App\Http\Requests\Front\VerifyResetCodeRequest;
 use Illuminate\Http\Request;
 use App\Mail\Front\ResetPasswordMail;
 use App\Models\User;
+use App\Repositories\ResetPasswords\ResetPasswordRepositoryInterface;
 use Carbon\Carbon;
 use DB;
 use Hash;
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 use Mail;
 use Str;
 
 class ResetPasswordController extends Controller
 {
-    public function sendResetMail(Request $request)
+    protected $resetPasswordRepo;
+    public function __construct(ResetPasswordRepositoryInterface $resetPasswordRepo)
     {
-        $request->validate([
-            'email' => ['required', 'email', 'exists:users'],
-        ]);
+        $this->resetPasswordRepo = $resetPasswordRepo;
+    }
 
-        $resetCode = strtoupper(Str::random(6));
-        DB::table('password_resets')->where('email', $request->email)->delete();
-        DB::table('password_resets')->insert([
+    public function sendResetMail(SendResetMailRequest $request)
+    {
+        $resetCode = $this->resetPasswordRepo->generateCode();
+
+        $this->resetPasswordRepo->clearPasswordReset($request->email);
+
+        $this->resetPasswordRepo->create([
             'email' => $request->email,
             'reset_code' => Hash::make($resetCode),
             'created_at' => now(),
@@ -34,19 +45,14 @@ class ResetPasswordController extends Controller
             ->queue(new ResetPasswordMail($resetCode));
 
         return response()->json([
-            'message'=>'Please check your email for password reset code.'
+            'message' => 'Please check your email for password reset code.'
         ]);
     }
 
-    public function verifyCode(Request $request)
+    public function verifyCode(VerifyResetCodeRequest $request)
     {
-        $request->validate([
-            'email' => ['required', 'email', 'exists:users,email'],
-            'reset_code' => ['required', 'string', 'max:6']
-        ]);
-
         try {
-            $this->resetCodeCheck($request->only('email', 'reset_code'));
+            $this->resetPasswordRepo->resetCodeCheck($request->only('email', 'reset_code'));
 
             return response()->json([
                 'message' => 'Your reset code is valid'
@@ -59,23 +65,22 @@ class ResetPasswordController extends Controller
         }
     }
 
-    public function resetPassword(Request $request)
+    public function resetPassword(ResetPasswordRequest $request)
     {
-        $request->validate([
-            'email' => ['required', 'email', 'exists:users,email'],
-            'password' => ['required', 'min:8', 'max:50'],
-            'reset_code' => ['required', 'max:6']
-        ]);
-
         try {
-            $this->resetCodeCheck($request->only('email', 'reset_code'));
+            $this->resetPasswordRepo->resetCodeCheck($request->only('email', 'reset_code'));
 
             User::where('email', $request->email)->update([
                 'password' => Hash::make($request->password)
             ]);
 
-            DB::table('password_resets')->where('email', $request->email)->delete();
+            $this->resetPasswordRepo->clearPasswordReset($request->email);
+
             User::where('email', $request->email)->first()->tokens()->delete();
+
+            if ($request->hasSession()) {
+                $request->session()->regenerate();
+            }
 
             return response()->json([
                 'message' => 'Password changed successfully'
@@ -84,21 +89,6 @@ class ResetPasswordController extends Controller
             return response()->json([
                 'message' => 'Your reset token is invalid',
                 'errors' => $ex->getErrors()
-            ]);
-        }
-    }
-
-    protected function resetCodeCheck($attributes)
-    {
-        $passwordReset = DB::table('password_resets')->where('email', $attributes['email'])->latest()->first();
-        if (!Hash::check($attributes['reset_code'], $passwordReset->reset_code)) {
-            throw new InvalidResetCode([
-                'token.match' => 'Your password reset code is not match our records',
-            ]);
-        }
-        if ((new Carbon($passwordReset->expire_at))->isPast()) {
-            throw new InvalidResetCode([
-                'token.expired' => 'Your password reset code is expired',
             ]);
         }
     }

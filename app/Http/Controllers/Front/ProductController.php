@@ -4,10 +4,16 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Repositories\Products\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    protected $productRepo;
+    public function __construct(ProductRepositoryInterface $productRepo)
+    {
+        $this->productRepo = $productRepo;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,10 +21,10 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        return Product::where('status', 1)
+        return $this->productRepo->wherePublic()
             ->limit($request->query('limit') ?? 100)
             ->offset($request->query('start') ?? 0)
-            ->with('images', 'cover', 'category:id,parent_id,slug,name', 'brand:id,slug,name')->get();
+            ->with('category:id,parent_id,slug,name', 'brand:id,slug,name')->get();
     }
 
     /**

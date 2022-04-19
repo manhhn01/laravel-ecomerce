@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Repositories\Product;
+namespace App\Repositories\Products;
 
 use App\Exceptions\TableConstraintException;
 use App\Repositories\RepositoryInterface;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ProductRepositoryInterface extends RepositoryInterface
 {
@@ -27,4 +29,9 @@ interface ProductRepositoryInterface extends RepositoryInterface
      * @throws TableConstraintException
      */
     public function delete($id);
+
+    /**
+     * @return QueryBuilder
+     */
+    public function wherePublic();
 }

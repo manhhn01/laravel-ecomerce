@@ -23,16 +23,18 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(CategorySeeder::class);
         $this->call(BrandSeeder::class);
-        \App\Models\User::factory(10)->create();
+
+        User::factory(10)->create();
         User::factory()->create([
-            'email' => 'admin@gmail.com'
+            'email' => 'admin@gmail.com',
+            'role_id' => '0'
         ]);
         $customer = User::factory(['role_id' => 1])->create();
         $categories = Category::all();
         $brands = Brand::all();
         $products = [];
 
-        // READ PRODUCT.JSON
+        // READ PRODUCTS.JSON
         $contents = file_get_contents(__DIR__ . "/products.json");
         $productsData = json_decode($contents, true);
 
@@ -40,6 +42,30 @@ class DatabaseSeeder extends Seeder
             $products[] = Product::factory(['name' => $productData['name']])
                 ->has(
                     ProductVariant::factory(3)
+                        ->has(
+                            ProductOption::factory(2),
+                            'options'
+                        ),
+                    'variants'
+                )
+                ->has(ProductImage::factory(3), 'images')
+                ->has(ProductImage::factory([
+                    'image' => $productData['image'],
+                    'type' => 'cover'
+                ]), 'images')
+                ->has(
+                    Review::factory(5)
+                        ->for($customer)
+                )
+                ->for($categories->random())
+                ->for($brands->random())
+                ->create();
+        }
+
+        foreach ($productsData as $productData) {
+            $products[] = Product::factory(['name' => $productData['name']])
+                ->has(
+                    ProductVariant::factory()
                         ->has(
                             ProductOption::factory(2),
                             'options'

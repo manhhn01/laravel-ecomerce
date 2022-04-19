@@ -15,8 +15,8 @@ class ProductVariantFactory extends Factory
     {
         return [
             'sku' => $this->faker->lexify('SP-???-???-??'),
-            'price' => $this->faker->numberBetween(99, 999),
-            'sale_price' => $this->faker->numberBetween(1, 98),
+            'price' => $this->faker->numberBetween(99, 999)*1000,
+            'sale_price' => rand(0, 1) ? $this->faker->numberBetween(1, 98)*1000 : null,
             'quantity' => $this->faker->numberBetween(99, 1999),
         ];
     }

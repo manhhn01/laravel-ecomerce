@@ -28,4 +28,16 @@ class ProductVariant extends Model
     {
         return $this->morphOne(ProductImage::class, 'imageable', 'VariantImage');
     }
+
+    public function getPriceAttribute($value){
+        return $this->priceFormat($value);
+    }
+
+    public function getSalePriceAttribute($value){
+        return $this->priceFormat($value);
+    }
+
+    protected function priceFormat($value){
+        return (!empty($value)) ? number_format($value, 0, ',', '.') : $value;
+    }
 }

@@ -1,6 +1,7 @@
 const mix = require("laravel-mix");
 const fs = require("fs");
-const path = require("path")
+const path = require("path");
+const { browserSync } = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -30,4 +31,9 @@ fs.readdirSync("resources/js/view").forEach((file) => {
         `resources/js/view/${file}`,
         `public/js/view/${path.parse(file).name}.min.js`
     );
+});
+
+browserSync({
+    open: false,
+    proxy: "localhost:8000"
 });

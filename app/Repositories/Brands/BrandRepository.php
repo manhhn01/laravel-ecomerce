@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Repositories\Supplier;
+namespace App\Repositories\Brands;
 
+use App\Models\Brand;
 use App\Models\Product;
-use App\Models\Supplier;
 use App\Repositories\BaseRepository;
 
-class SupplierRepository extends BaseRepository implements SupplierRepositoryInterface
+class BrandRepository extends BaseRepository implements BrandRepositoryInterface
 {
     public function getModel()
     {
-        return Supplier::class;
+        return Brand::class;
     }
 
     public function getProductsPage($amount, $supplier_id, $filter = null)

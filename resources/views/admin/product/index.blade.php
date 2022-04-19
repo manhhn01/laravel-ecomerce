@@ -3,8 +3,7 @@
     <div class="content-header">
         <h2 class="content-title"> Danh sách sản phẩm</h2>
         <div>
-            <a href="{{ route('admin.products.create',  ['page'=>request()->page, 'search'=>request()->search]) }}"
-               type="submit" class="btn btn-primary">Thêm sản phẩm</a>
+            <a href="{{ route('admin.products.create',  ['page'=>request()->page, 'search'=>request()->search]) }}" type="submit" class="btn btn-primary">Thêm sản phẩm</a>
         </div>
     </div>
 
@@ -24,11 +23,9 @@
                         </div>
                         <div class="col-md-2 col-6">
                             <select class="form-select status-select" name="status">
-                                <option value="all" {{ request()->query('status')=="" ? 'selected' : '' }}>Tất cả</option>
-                                <option value="1" {{ request()->query('status')==="1" ? 'selected' : '' }}>Đang bán
-                                </option>
-                                <option value="0" {{ request()->query('status')==="0" ? 'selected' : '' }}>Dừng bán
-                                </option>
+                                <option value="" {{ request()->query('status')=="" ? 'selected' : '' }}>Tất cả</option>
+                                <option value="1" {{ request()->query('status')==="1" ? 'selected' : '' }}>Đang bán </option>
+                                <option value="0" {{ request()->query('status')==="0" ? 'selected' : '' }}>Dừng bán </option>
                             </select>
                         </div>
                     </div>
@@ -36,7 +33,7 @@
             </header> <!-- card-header end// -->
 
             <div class="card-body">
-                <x-list-products type="index" :products="$products"/>
+                <x-list-products :products="$products"/>
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
 
@@ -44,5 +41,5 @@
 @endsection
 
 @push('js')
-    <script src="{{ asset('js/product.js') }}"></script>
+    <script src="{{ asset('js/view/product.min.js') }}"></script>
 @endpush
