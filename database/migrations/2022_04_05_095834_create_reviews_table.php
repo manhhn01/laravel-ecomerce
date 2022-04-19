@@ -18,7 +18,7 @@ class CreateReviewsTable extends Migration
 
             $table->foreignId('product_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->tinyInteger('vote');
+            $table->tinyInteger('rating');
             $table->text('comment');
             $table->tinyInteger('like');
             $table->boolean('status');
