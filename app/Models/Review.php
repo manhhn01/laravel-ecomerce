@@ -10,7 +10,7 @@ class Review extends Model
 {
     use HasFactory, StatusScope;
 
-    protected $with = ['user:id,email,first_name,last_name,avatar'];
+    // protected $with = ['user:id,email,first_name,last_name,avatar'];
 
     protected $hidden = ['product_id', 'user_id'];
 

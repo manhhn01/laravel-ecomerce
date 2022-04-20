@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Access\AuthorizationException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Admin
 {
@@ -17,11 +19,13 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(optional($request->user())->role_id === 0){
+        if (optional($request->user())->role_id === 0) {
             return $next($request);
-        }
-        else{
-            return redirect(RouteServiceProvider::HOME);
+        } else {
+            // if ($request->wantsJson())
+            //     throw new AuthorizationException();
+            // else
+                return redirect(RouteServiceProvider::HOME);
         }
     }
 }

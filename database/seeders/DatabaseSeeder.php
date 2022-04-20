@@ -48,32 +48,24 @@ class DatabaseSeeder extends Seeder
         foreach ($productsData as $productData) {
             $products[] = Product::factory(['name' => $productData['name']])
                 ->has(
-                    ProductVariant::factory(3)
+                    ProductVariant::factory()
                         ->for($sizes->random())
                         ->for($colors->random())
                         ->has(ProductImage::factory(), 'image'),
                     'variants'
                 )
-                ->has(ProductImage::factory(3), 'images')
-                ->has(ProductImage::factory([
-                    'image' => $productData['image'],
-                    'type' => 'cover'
-                ]), 'images')
-                ->has(
-                    Review::factory(5)
-                        ->for($customer)
-                )
-                ->for($categories->random())
-                ->for($brands->random())
-                ->create();
-        }
-
-        foreach ($productsData as $productData) {
-            $products[] = Product::factory(['name' => $productData['name']])
                 ->has(
                     ProductVariant::factory()
                         ->for($sizes->random())
-                        ->for($colors->random()),
+                        ->for($colors->random())
+                        ->has(ProductImage::factory(), 'image'),
+                    'variants'
+                )
+                ->has(
+                    ProductVariant::factory()
+                        ->for($sizes->random())
+                        ->for($colors->random())
+                        ->has(ProductImage::factory(), 'image'),
                     'variants'
                 )
                 ->has(ProductImage::factory(3), 'images')

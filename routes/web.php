@@ -29,44 +29,45 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('/admin')->name('admin.')->group(function () {
-    Route::middleware(['auth', 'admin'])->group(function () {
-        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-        Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+// Route::prefix('/admin')->name('admin.')->group(function () {
+//     Route::middleware(['auth', 'admin'])->group(function () {
+//         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+//         Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-        /* PRODUCT */
-        Route::resource('products', ProductController::class, ['name' => 'products']);
+//         /* PRODUCT */
+//         Route::resource('products', ProductController::class, ['name' => 'products']);
 
-        /* CATEGORY */
-        Route::resource('categories', CategoryController::class, ['name' => 'categories']);
+//         /* CATEGORY */
+//         Route::resource('categories', CategoryController::class, ['name' => 'categories']);
 
-        /* BRAND */
-        Route::resource('brands', BrandController::class, ['name' => 'brands']);
+//         /* BRAND */
+//         Route::resource('brands', BrandController::class, ['name' => 'brands']);
 
-        /* ORDER */
-        Route::resource('orders', OrderController::class, ['name' => 'orders']);
+//         /* ORDER */
+//         Route::resource('orders', OrderController::class, ['name' => 'orders']);
 
-        /* COUPON */
-        Route::resource('coupons', CouponController::class, ['name' => 'coupons']);
+//         /* COUPON */
+//         Route::resource('coupons', CouponController::class, ['name' => 'coupons']);
 
-        /* RECEIVE NOTE */
-        Route::resource('received-notes', ReceivedNoteController::class, ['name' => 'received-notes']);
+//         /* RECEIVE NOTE */
+//         // Route::resource('received-notes', ReceivedNoteController::class, ['name' => 'received-notes']);
 
-        /* USER */
-        Route::resource('users', UserController::class, ['name' => 'users']);
-    });
+//         /* USER */
+//         Route::resource('users', UserController::class, ['name' => 'users']);
+//     });
 
-    Route::middleware('guest')->group(function () {
-        Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [LoginController::class, 'login']);
-    });
-});
+//     Route::middleware('guest')->group(function () {
+//         Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+//         Route::post('/login', [LoginController::class, 'login']);
+//     });
+// });
 /*
 |--------------------------------------------------------------------------
 | User Routes
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
+    return view('auth.register');
     // return (App\Models\Product::first());
 });
 

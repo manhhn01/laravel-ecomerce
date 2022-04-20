@@ -60,4 +60,8 @@ class User extends Authenticatable
     public function getFullNameAttribute($value){
         return $this->first_name.' '.$this->last_name;
     }
+
+    public function isAdmin(){
+        return $this->role_id == 0;
+    }
 }

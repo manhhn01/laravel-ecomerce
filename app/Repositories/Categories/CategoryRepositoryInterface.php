@@ -14,4 +14,16 @@ interface CategoryRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getProductsPage($amount, $category_id, $filter);
+
+    /**
+     * return all root categories
+     * @return mixed
+     */
+    public function allRoot();
+
+    /**
+     * return all root categories with children
+     * @return mixed
+     */
+    public function allRootWithChildren();
 }

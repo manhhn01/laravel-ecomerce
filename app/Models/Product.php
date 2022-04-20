@@ -14,7 +14,7 @@ class Product extends Model
         'name', 'slug', 'description', 'status'
     ];
 
-    protected $appends = ['rating'];
+    protected $appends = ['rating_avg'];
 
     protected $with = ['cover'];
 
@@ -65,7 +65,7 @@ class Product extends Model
      */
     public function getPriceAttribute($value)
     {
-        return $this->priceFormat($value) . ' đ';
+        return $this->priceFormat($value);
     }
 
     /**
@@ -73,21 +73,21 @@ class Product extends Model
      */
     public function getSalePriceAttribute($value)
     {
-        return $this->priceFormat($value) . ' đ';
+        return $this->priceFormat($value);
     }
 
     /**
      * @return string
      */
 
-    public function getRatingAttribute()
+    public function getRatingAvgAttribute()
     {
-        return round_down($this->reviews()->status(1)->avg('rating'), 0.5);
+        return round_down($this->reviews->where('status', 1)->avg('rating'), 0.5);
     }
 
     protected function priceFormat($value)
     {
-        return (!empty($value)) ? number_format($value, 0, ',', '.') : $value;
+        return (!empty($value)) ? number_format($value, 0, ',', '.').' đ' : $value;
     }
 
     public function toSearchableArray()

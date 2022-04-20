@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Repositories\Products\ProductRepositoryInterface;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductController extends Controller
 {
@@ -14,6 +15,7 @@ class ProductController extends Controller
     {
         $this->productRepo = $productRepo;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,32 +23,14 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->productRepo->wherePublic()
-            ->limit($request->query('limit') ?? 100)
+        return Product::with('publicReviews')
+            ->status(1)
+            ->orderBy('created_at', 'desc')
+            ->limit($request->query('limit') ?? 25)
             ->offset($request->query('start') ?? 0)
-            ->withCount('publicReviews')
-            ->get();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+            ->get()
+            ->loadCount('publicReviews')
+            ->makeHidden('reviews', 'publicReviews');
     }
 
     /**
@@ -57,42 +41,11 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return $product
-            ->load('images', 'category:id,parent_id,slug,name', 'brand:id,slug,name', 'publicReviews', 'variants.image')
-            ->loadCount('publicReviews');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        if ($product->status == 1)
+            return $product
+                ->load('images', 'category:id,parent_id,slug,name', 'brand:id,slug,name', 'publicReviews.user', 'variants.image')
+                ->loadCount('publicReviews');
+        else
+            throw new NotFoundHttpException('Product not found');
     }
 }

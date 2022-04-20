@@ -17,4 +17,16 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     {
         return Product::where('category_id', $category_id)->ofType($filter)->paginate($amount);
     }
+
+    public function allRoot()
+    {
+        return $this->model->whereDoesntHave('parent')->get();
+    }
+
+    public function allRootWithChildren()
+    {
+        return $this->model->whereDoesntHave('parent')->with('allChildren')->get();
+    }
+
+
 }
