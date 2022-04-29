@@ -2,19 +2,40 @@
 
 namespace Database\Seeders;
 
-use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
-use App\Models\ProductImage;
+use App\Models\Image;
 use App\Models\ProductVariant;
 use App\Models\Review;
 use App\Models\Size;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    /**
+     * @var User
+     */
+    protected $customers;
+    /**
+     * @var Category
+     */
+    protected $categories;
+    /**
+     * @var Color
+     */
+    protected $colors;
+    /**
+     * @var Size
+     */
+    protected $sizes;
+    /**
+     * @var Tag
+     */
+    protected $tags;
+
     /**
      * Seed the application's database.
      *
@@ -22,64 +43,66 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(UserSeeder::class);
         $this->call(CategorySeeder::class);
-        $this->call(BrandSeeder::class);
         $this->call(ColorSeeder::class);
         $this->call(SizeSeeder::class);
+        $this->call(TagSeeder::class);
 
-        User::factory(10)->create();
-        User::factory()->create([
-            'email' => 'admin@gmail.com',
-            'role_id' => '0'
-        ]);
+        $this->customers = User::where('role_id', '!=', 0)->get();
+        $this->categories = Category::all();
+        $this->colors = Color::all();
+        $this->sizes = Size::all();
+        $this->tags = Tag::all();
 
-        $customer = User::factory(['role_id' => 1])->create();
-        $categories = Category::all();
-        $brands = Brand::all();
-        $colors = Color::all();
-        $sizes = Size::all();
+        $femaleProducts = json_decode(file_get_contents(__DIR__ . "/data/product-female.json"), true);
+        $maleProducts = json_decode(file_get_contents(__DIR__ . "/data/product-male.json"), true);
+        $kidProducts = json_decode(file_get_contents(__DIR__ . "/data/product-kid.json"), true);
 
-        $products = [];
+        $this->createProducts($femaleProducts, $this->categories->firstWhere('name', 'Nữ'));
+        $this->createProducts($maleProducts, $this->categories->firstWhere('name', 'Nam'));
+        $this->createProducts($kidProducts, $this->categories->firstWhere('name', 'Trẻ em'));
+    }
 
-        // READ PRODUCTS.JSON
-        $contents = file_get_contents(__DIR__ . "/products.json");
-        $productsData = json_decode($contents, true);
-
-        foreach ($productsData as $productData) {
-            $products[] = Product::factory(['name' => $productData['name']])
-                ->has(
-                    ProductVariant::factory()
-                        ->for($sizes->random())
-                        ->for($colors->random())
-                        ->has(ProductImage::factory(), 'image'),
-                    'variants'
-                )
-                ->has(
-                    ProductVariant::factory()
-                        ->for($sizes->random())
-                        ->for($colors->random())
-                        ->has(ProductImage::factory(), 'image'),
-                    'variants'
-                )
-                ->has(
-                    ProductVariant::factory()
-                        ->for($sizes->random())
-                        ->for($colors->random())
-                        ->has(ProductImage::factory(), 'image'),
-                    'variants'
-                )
-                ->has(ProductImage::factory(3), 'images')
-                ->has(ProductImage::factory([
-                    'image' => $productData['image'],
-                    'type' => 'cover'
-                ]), 'images')
+    protected function createProducts($products)
+    {
+        foreach ($products as $productData) {
+            // print_r('Create product:');
+            // print_r($productData);
+            $product = Product::factory([
+                'name' => $productData['name'],
+                'slug' => $productData['slug'],
+                'cover' => 'images/products/'.basename(parse_url($productData['cover'], PHP_URL_PATH)),
+                'description' => $productData['description'],
+                'price' => $productData['price'],
+                'sale_price' => $productData['sale_price']
+            ])
                 ->has(
                     Review::factory(5)
-                        ->for($customer)
+                        ->for($this->customers->random())
                 )
-                ->for($categories->random())
-                ->for($brands->random())
+                ->for($this->categories->firstWhere('name', $productData['category']))
                 ->create();
+
+            foreach ($productData['variants'] as $productVariant) {
+                $color = $this->colors->firstWhere('name', $productVariant['color']);
+                $size = $this->sizes->firstWhere('name', $productVariant['size']) ?? Size::where('name', 'Free size')->first();
+
+                ProductVariant::factory([
+                    'id' => $productVariant['id'],
+                    'sku' => $productVariant['sku'],
+                    'quantity' => $productVariant['quantity'],
+                    'cover' => isset($productVariant['cover']) ? 'images/products/'.basename(parse_url($productVariant['cover'], PHP_URL_PATH)) : 'images/products/'.rand(0, 100).'.jpeg',
+                ])
+                    ->for($product)
+                    ->for($color)
+                    ->for($size)
+                    ->create();
+            }
+
+            foreach ($productData['images'] as $productImage) {
+                Image::factory(['image' => 'images/'.basename(parse_url($productImage, PHP_URL_PATH))])->for($product, 'imageable')->create();
+            }
         }
     }
 }

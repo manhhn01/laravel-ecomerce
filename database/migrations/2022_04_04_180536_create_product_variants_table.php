@@ -19,6 +19,7 @@ class CreateProductVariantsTable extends Migration
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('sku')->unique();
             $table->smallInteger('quantity');
+            $table->string('cover');
 
             $table->foreignId('color_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('size_id')->nullable()->constrained()->nullOnDelete();

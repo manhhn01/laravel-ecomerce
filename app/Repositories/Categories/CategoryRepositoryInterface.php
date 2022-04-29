@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Categories;
 
+use App\Models\Category;
 use App\Repositories\RepositoryInterface;
+use Illuminate\Database\Query\Builder;
 
 interface CategoryRepositoryInterface extends RepositoryInterface
 {
@@ -26,4 +28,30 @@ interface CategoryRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function allRootWithChildren();
+
+    /**
+     * return category's products
+     * @return Collection
+     * @param Category $category
+     * @param array $filter
+     */
+    public function allProducts($category);
+
+    /**
+     * return category's products with pagination
+     * @param Category $category
+     * @param array $filters
+     * @param int $perPage
+     * @param string $sortBy
+     * @param string $order
+     * @return Collection
+     */
+    public function allProductsPage($category, $filters, $perPage = 30, $sortBy = 'created_at', $order = 'desc');
+
+    /**
+     * @param Builder $productsQuery
+     * @param array $filter
+     * @return Builder
+     */
+    public function productsFilter($productsQuery, $filter);
 }

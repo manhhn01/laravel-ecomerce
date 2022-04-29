@@ -52,10 +52,9 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function page($perPage, $search = null, $status = null)
     {
-        if(isset($search)){
+        if (isset($search)) {
             return $this->model->search($search)->orderBy('created_at', 'desc')->where('status', $status)->paginate($perPage);
-        }
-        else {
+        } else {
             return $this->model->latest()->status($status)->paginate($perPage);
         }
     }
@@ -64,9 +63,13 @@ abstract class BaseRepository implements RepositoryInterface
     {
         if (isset($limit)) {
             return $this->model->latest()->limit($limit)->get();
-        }
-        else {
+        } else {
             return $this->model->latest()->get();
         }
+    }
+
+    public function findByIdOrSlug($idSlug)
+    {
+        return $this->model->where('id', $idSlug)->orWhere('slug', $idSlug)->firstOrFail();
     }
 }

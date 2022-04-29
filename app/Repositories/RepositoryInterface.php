@@ -5,7 +5,7 @@ namespace App\Repositories;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 interface RepositoryInterface
 {
@@ -54,4 +54,10 @@ interface RepositoryInterface
      * @return Collection
      */
     public function latest($limit = null);
+
+    /**
+     * @return Collection
+     * @throws ModelNotFoundException
+     */
+    public function findByIdOrSlug($idSlug);
 }

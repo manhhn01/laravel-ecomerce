@@ -14,20 +14,14 @@ class Product extends Model
         'name', 'slug', 'description', 'status'
     ];
 
+    protected $with = ['reviews'];
     protected $appends = ['rating_avg'];
 
-    protected $with = ['cover'];
-
-    protected $hidden = ['category_id', 'brand_id'];
+    protected $hidden = ['category_id'];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
     }
 
     public function coupon()
@@ -52,29 +46,33 @@ class Product extends Model
 
     public function images()
     {
-        return $this->morphMany(ProductImage::class, 'imageable');
+        return $this->morphMany(Image::class, 'imageable');
     }
 
-    public function cover()
-    {
-        return $this->morphOne(ProductImage::class, 'imageable')->where('type', 'cover');
+    public function rootCategory(){
+        return $this->category->parent();
     }
 
-    /**
-     * @return string
-     */
-    public function getPriceAttribute($value)
-    {
-        return $this->priceFormat($value);
-    }
+    // /**
+    //  * @return string
+    //  */
+    // public function getPriceAttribute($value)
+    // {
+    //     return $this->priceFormat($value);
+    // }
 
-    /**
-     * @return string
-     */
-    public function getSalePriceAttribute($value)
-    {
-        return $this->priceFormat($value);
-    }
+    // /**
+    //  * @return string
+    //  */
+    // public function getSalePriceAttribute($value)
+    // {
+    //     return $this->priceFormat($value);
+    // }
+
+    // protected function priceFormat($value)
+    // {
+    //     return (!empty($value)) ? number_format($value, 0, ',', '.') . ' đ' : $value;
+    // }
 
     /**
      * @return string
@@ -85,9 +83,25 @@ class Product extends Model
         return round_down($this->reviews->where('status', 1)->avg('rating'), 0.5);
     }
 
-    protected function priceFormat($value)
+    public function getCoverAttribute($value)
     {
-        return (!empty($value)) ? number_format($value, 0, ',', '.').' đ' : $value;
+        return asset("storage/$value");
+    }
+
+    public function getOptionsAttribute()
+    {
+        return $this->variants->mapToGroups(function ($variant) {
+            return [
+                $variant->color->name => [
+                    $variant->size->name => [
+                        'variant_id' => $variant->id,
+                        'sku' => $variant->sku,
+                        'quantity' => $variant->quantity,
+                        'variant_image' => $variant->cover
+                    ]
+                ]
+            ];
+        });
     }
 
     public function toSearchableArray()

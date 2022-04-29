@@ -20,6 +20,7 @@ class CreateCategoriesTable extends Migration
             $table->string('slug');
             $table->foreignId('parent_id')->nullable()->references('id')->on('categories');
             $table->string('description')->nullable();
+            $table->string('cover')->nullable();
 
             $table->timestamps();
         });

@@ -14,7 +14,9 @@ class ColorSeeder extends Seeder
      */
     public function run()
     {
-        collect(['Đỏ', 'Trắng', 'Vàng', 'Xanh', 'Tím', 'Đen', 'Trắng'])->each(function ($element) {
+        $colorContent = file_get_contents(__DIR__.'/data/color.json');
+        $colors = json_decode($colorContent);
+        collect($colors)->each(function ($element) {
             Color::create(['name' => $element]);
         });
     }

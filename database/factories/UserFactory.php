@@ -19,7 +19,9 @@ class UserFactory extends Factory
             'last_name' => $this->faker->lastName(),
             'gender' => 0,
             'email' => $this->faker->unique()->safeEmail(),
-            'role_id' => 0,
+            'phone' => $this->faker->phoneNumber(),
+            'dob' => $this->faker->dateTimeBetween(),
+            'role_id' => 1, //customer
             'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
         ];

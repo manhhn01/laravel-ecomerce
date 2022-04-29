@@ -21,10 +21,10 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 15, 2);
             $table->decimal('sale_price', 15, 2)->nullable();
             $table->text('description');
+            $table->string('cover');
             $table->tinyInteger('status');
 
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('brand_id')->nullable()->constrained()->nullOnDelete();
 
             $table->timestamps();
         });

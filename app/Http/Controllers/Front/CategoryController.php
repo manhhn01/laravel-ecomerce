@@ -27,20 +27,14 @@ class CategoryController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * @param  Request $request
      * @param  Category  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Category $category)
+    public function show(Request $request, $id_slug)
     {
-        $category->load(['publicProducts' => function ($q) use ($request) {
-            return $q->orderBy('created_at', 'desc')
-                ->limit($request->query('limit') ?? 25)
-                ->offset($request->query('start') ?? 0)
-                ->with('publicReviews')
-                ->withCount('publicReviews');
-        }])->publicProducts->makeHidden(['publicReviews', 'reviews']);
-
-        return $category;
+        $category = $this->categoryRepo->findByIdOrSlug($id_slug);
+        $filterNames = ['limit', 'start', 'color', 'category', 'size', 'price_min', 'price_max'];
+        return $this->categoryRepo->allProductsPage($category, $request->only($filterNames), 30);
     }
 }

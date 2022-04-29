@@ -53,6 +53,10 @@ class User extends Authenticatable
         'avatar' => 'images/users/default-user.png'
     ];
 
+    public function cartProducts(){
+        return $this->belongsToMany(ProductVariant::class, 'cart_products')->withPivot('quantity')->withTimestamps();
+    }
+
     public function getAvatarAttribute($value){
         return asset("storage/$value");
     }

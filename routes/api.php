@@ -13,25 +13,50 @@ use App\Http\Controllers\ProductController;
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('/register', [Front\Auth\RegisterController::class, 'register']);
 Route::post('/login', [Front\Auth\LoginController::class, 'login']);
 Route::middleware('throttle:email')->post('/forgot', [ResetPasswordController::class, 'sendResetMail']);
 Route::middleware('throttle:verify_code')->post('/reset_password/verify', [ResetPasswordController::class, 'verifyCode']);
-Route::middleware('throttle:verify_code')->post('/reset_password', [ResetPasswordController::class, 'resetPassword']);
+Route::middleware('throttle:verify_code')->patch('/reset_password', [ResetPasswordController::class, 'resetPassword']);
 
 /* PRODUCT */
-Route::get('/products', [Front\ProductController::class, 'index']);
-Route::get('/products/id/{product}', [Front\ProductController::class, 'show']);
-Route::get('/products/{product:slug}', [Front\ProductController::class, 'show']);
+Route::prefix('/products')->group(function () {
+    Route::get('/search', [Front\ProductController::class, 'search']);
+    Route::get('/{id_slug}', [Front\ProductController::class, 'show']);
+});
 
 /* CATEGORY */
-Route::get('/categories', [Front\CategoryController::class, 'index']);
-Route::get('/categories/id/{category}', [Front\CategoryController::class, 'show']);
-Route::get('/categories/{category}', [Front\CategoryController::class, 'show']);
+Route::prefix('/categories')->group(function () {
+    Route::get('/', [Front\CategoryController::class, 'index']);
+    Route::get('/{id_slug}', [Front\CategoryController::class, 'show']);
+});
+
+
+/* USER INFO */
+Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
+    Route::get('/', function (Request $request) {
+        return $request->user();
+    });
+
+    /* CART */
+    Route::prefix('/cart')->group(function () {
+        Route::get('/', [Front\CartProductController::class, 'index']);
+        Route::post('/', [Front\CartProductController::class, 'store']);
+        Route::put('/', [Front\CartProductController::class, 'update']);
+        Route::patch('/{id}', [Front\CartProductController::class, 'updateOne']);
+        Route::delete('/{id}', [Front\CartProductController::class, 'destroy']);
+    });
+
+    /* WISHLIST */
+    Route::prefix('/wishlist')->group(function(){
+        Route::get('/', []);
+        Route::post('/', []);
+        Route::patch('/', []);
+    });
+
+    /* INFO */
+    Route::patch('/', [Front\UserInfoController::class, 'update']);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -49,8 +74,6 @@ Route::prefix('admin')->group(function () {
         //color
 
         /* CATEGORY */
-
-        /* BRAND */
 
         /* ORDER */
 

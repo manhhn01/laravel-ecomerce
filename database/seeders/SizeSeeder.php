@@ -14,7 +14,9 @@ class SizeSeeder extends Seeder
      */
     public function run()
     {
-        collect(['S', 'M', 'L', 'XL', '2XL'])->each(function ($element) {
+        $sizeContent = file_get_contents(__DIR__.'/data/size.json');
+        $sizes = json_decode($sizeContent);
+        collect($sizes)->each(function ($element) {
             Size::create(['name' => $element]);
         });
     }

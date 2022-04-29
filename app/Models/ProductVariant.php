@@ -26,14 +26,13 @@ class ProductVariant extends Model
         'updated_at'
     ];
 
+    public function product(){
+        return $this->belongsTo(Product::class);
+    }
+
     public function orders()
     {
         return $this->belongsToMany(Order::class);
-    }
-
-    public function image()
-    {
-        return $this->morphOne(ProductImage::class, 'imageable');
     }
 
     public function size()
@@ -44,5 +43,10 @@ class ProductVariant extends Model
     public function color()
     {
         return $this->belongsTo(Color::class);
+    }
+
+    public function getCoverAttribute($value)
+    {
+        return asset("storage/$value");
     }
 }

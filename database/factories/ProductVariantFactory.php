@@ -14,8 +14,9 @@ class ProductVariantFactory extends Factory
     public function definition()
     {
         return [
-            'sku' => $this->faker->lexify('SP-LO-???-??'),
+            'sku' => strtoupper($this->faker->lexify('SP-LO-???-??')),
             'quantity' => $this->faker->numberBetween(99, 1999),
+            'cover' => 'images/products/' . $this->faker->numberBetween(0, 359) . '.jpeg',
         ];
     }
 }
