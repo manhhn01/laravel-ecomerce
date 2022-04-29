@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->boolean('gender');
             $table->date('dob')->nullable();
             $table->string('password');
-            $table->char('phone', 15)->nullable();
+            $table->char('phone', 25)->nullable();
             $table->string('avatar')->nullable();
             $table->smallInteger('role_id')->default(1);
             $table->rememberToken();
