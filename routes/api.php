@@ -34,9 +34,11 @@ Route::prefix('/categories')->group(function () {
 
 /* USER INFO */
 Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
+    /* INFO */
     Route::get('/', function (Request $request) {
         return $request->user();
     });
+    Route::patch('/', [Front\UserInfoController::class, 'update']);
 
     /* CART */
     Route::prefix('/cart')->group(function () {
@@ -48,14 +50,11 @@ Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
     });
 
     /* WISHLIST */
-    Route::prefix('/wishlist')->group(function(){
+    Route::prefix('/wishlist')->group(function () {
         Route::get('/', []);
         Route::post('/', []);
         Route::patch('/', []);
     });
-
-    /* INFO */
-    Route::patch('/', [Front\UserInfoController::class, 'update']);
 });
 
 /*

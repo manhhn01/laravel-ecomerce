@@ -28,8 +28,7 @@ class ProductController extends Controller
                     $products
                         ->makeHidden(['reviews', 'publicReviews'])
                         ->load('variants')
-                        ->loadCount('publicReviews')
-                        ->append('options');
+                        ->loadCount('publicReviews');
                 });
         }
 
@@ -42,8 +41,7 @@ class ProductController extends Controller
         if ($product->status == 1)
             return $product
                 ->load('images', 'category:id,parent_id,slug,name', 'publicReviews.user', 'variants')
-                ->loadCount('publicReviews')
-                ->append('options');
+                ->loadCount('publicReviews');
         else
             throw new NotFoundHttpException('Product not found');
     }

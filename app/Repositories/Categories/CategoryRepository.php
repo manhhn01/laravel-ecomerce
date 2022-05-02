@@ -54,7 +54,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         return collect($category)->merge([
             'children' => $category->children->makeHidden(['description', 'cover']),
             'products' => $products->paginate($perPage)->tap(function($products){
-                $products->makeHidden(['reviews', 'publicReviews', 'laravel_through_key'])->append('options');
+                $products->makeHidden(['reviews', 'publicReviews', 'laravel_through_key']);
             }),
         ]);
     }

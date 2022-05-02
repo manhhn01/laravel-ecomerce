@@ -53,27 +53,6 @@ class Product extends Model
         return $this->category->parent();
     }
 
-    // /**
-    //  * @return string
-    //  */
-    // public function getPriceAttribute($value)
-    // {
-    //     return $this->priceFormat($value);
-    // }
-
-    // /**
-    //  * @return string
-    //  */
-    // public function getSalePriceAttribute($value)
-    // {
-    //     return $this->priceFormat($value);
-    // }
-
-    // protected function priceFormat($value)
-    // {
-    //     return (!empty($value)) ? number_format($value, 0, ',', '.') . ' đ' : $value;
-    // }
-
     /**
      * @return string
      */
@@ -86,22 +65,6 @@ class Product extends Model
     public function getCoverAttribute($value)
     {
         return asset("storage/$value");
-    }
-
-    public function getOptionsAttribute()
-    {
-        return $this->variants->mapToGroups(function ($variant) {
-            return [
-                $variant->color->name => [
-                    $variant->size->name => [
-                        'variant_id' => $variant->id,
-                        'sku' => $variant->sku,
-                        'quantity' => $variant->quantity,
-                        'variant_image' => $variant->cover
-                    ]
-                ]
-            ];
-        });
     }
 
     public function toSearchableArray()
