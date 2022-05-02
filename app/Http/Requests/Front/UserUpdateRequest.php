@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class UserInformationUpdateRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -29,6 +29,7 @@ class UserInformationUpdateRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        dd($this->all());
         if(empty($this->all())){
             throw ValidationException::withMessages(["inputs" => "Invalid data"]);
         }

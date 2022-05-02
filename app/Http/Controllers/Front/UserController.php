@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Front\UserInformationUpdateRequest;
+use App\Http\Requests\Front\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class UserInfoController extends Controller
+class UserController extends Controller
 {
-    public function update(UserInformationUpdateRequest $request)
+    public function update(UserUpdateRequest $request)
     {
         /**
          * @var User

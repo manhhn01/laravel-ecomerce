@@ -32,13 +32,13 @@ Route::prefix('/categories')->group(function () {
 });
 
 
-/* USER INFO */
+/* USER */
 Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
     /* INFO */
     Route::get('/', function (Request $request) {
         return $request->user();
     });
-    Route::patch('/', [Front\UserInfoController::class, 'update']);
+    Route::patch('/', [Front\UserController::class, 'update']);
 
     /* CART */
     Route::prefix('/cart')->group(function () {
