@@ -17,7 +17,7 @@ Route::post('/register', [Front\Auth\RegisterController::class, 'register']);
 Route::post('/login', [Front\Auth\LoginController::class, 'login']);
 Route::middleware('throttle:email')->post('/forgot', [ResetPasswordController::class, 'sendResetMail']);
 Route::middleware('throttle:verify_code')->post('/reset_password/verify', [ResetPasswordController::class, 'verifyCode']);
-Route::middleware('throttle:verify_code')->patch('/reset_password', [ResetPasswordController::class, 'resetPassword']);
+Route::middleware('throttle:verify_code')->put('/reset_password', [ResetPasswordController::class, 'resetPassword']);
 
 /* PRODUCT */
 Route::prefix('/products')->group(function () {
