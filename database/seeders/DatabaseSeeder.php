@@ -101,7 +101,7 @@ class DatabaseSeeder extends Seeder
             }
 
             foreach ($productData['images'] as $productImage) {
-                Image::factory(['image' => 'images/'.basename(parse_url($productImage, PHP_URL_PATH))])->for($product, 'imageable')->create();
+                Image::factory(['image' => 'images/products/'.basename(parse_url($productImage, PHP_URL_PATH))])->for($product, 'imageable')->create();
             }
         }
     }
