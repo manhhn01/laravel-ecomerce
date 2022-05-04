@@ -5,6 +5,8 @@ namespace App\Repositories\Categories;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\Size;
+use App\Models\Tag;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Cache;
 
@@ -52,58 +54,56 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             $products = $this->productsFilter($products, $filters);
         }
 
-        return $category->setAttribute('products', $products->paginate($perPage)->tap(function ($products) {
-            $products->makeHidden(['reviews', 'publicReviews', 'laravel_through_key']);
-        }));
+        return $category->setAttribute('products', $products->paginate($perPage));
     }
 
-    public function productsFilter($productsQuery, $filter)
+    public function productsFilter($productsQuery, $filters)
     {
         if (isset($filters['price_min']))
             $productsQuery
-                ->where(function ($q) use ($filter) {
+                ->where(function ($q) use ($filters) {
                     return $q
                         ->whereNotNull('sale_price')
-                        ->where('sale_price', '>', $filter['price_min']);
+                        ->where('sale_price', '>', $filters['price_min']);
                 })
-                ->orWhere(function ($q) use ($filter) {
+                ->orWhere(function ($q) use ($filters) {
                     return $q
                         ->whereNull('sale_price')
-                        ->where('price', '>', $filter['price_min']);
+                        ->where('price', '>', $filters['price_min']);
                 });
 
         if (isset($filters['price_max']))
             $productsQuery
-                ->where(function ($q) use ($filter) {
+                ->where(function ($q) use ($filters) {
                     return $q
                         ->whereNotNull('sale_price')
-                        ->where('sale_price', '>', $filter['price_max']);
+                        ->where('sale_price', '>', $filters['price_max']);
                 })
-                ->orWhere(function ($q) use ($filter) {
+                ->orWhere(function ($q) use ($filters) {
                     return $q
                         ->whereNull('sale_price')
-                        ->where('price', '>', $filter['price_max']);
+                        ->where('price', '>', $filters['price_max']);
                 });
 
         if (isset($filters['color'])) {
             $colorTags = explode(',', $filters['color']);
             $productsQuery
-                ->whereHas('variants', function ($q) use ($colorTags) {
-                    // todo
-                    return $q->whereIn('color_id', $colorTags);
+                ->whereHas('tags', function ($q) use ($colorTags) {
+                    return $q->whereIn('tags.name', $colorTags);
                 });
         }
 
         if (isset($filters['size'])) {
-            $sizes = explode(',', $filters['size']);
-            $productsQuery
-                ->whereHas('variants', function ($q) use ($sizes) {
-                    return $q->whereIn('size_id', $sizes);
+            $sizeNames = explode(',', $filters['size']);
+            $productsQuery->whereHas('variants', function ($q) use ($sizeNames) {
+                $q->whereHas('size', function ($q) use ($sizeNames) {
+                    $q->whereIn('sizes.name', $sizeNames);
                 });
+            });
         }
 
-        if (isset($filters['category'])) {
-            $productsQuery = $productsQuery->where('category_id', $filters['category']);
+        if (isset($filters['category_id'])) {
+            $productsQuery = $productsQuery->where('category_id', $filters['category_id']);
         }
 
         return $productsQuery;

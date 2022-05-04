@@ -50,8 +50,8 @@ interface CategoryRepositoryInterface extends RepositoryInterface
 
     /**
      * @param Builder $productsQuery
-     * @param array $filter
+     * @param array $filters
      * @return Builder
      */
-    public function productsFilter($productsQuery, $filter);
+    public function productsFilter($productsQuery, $filters);
 }

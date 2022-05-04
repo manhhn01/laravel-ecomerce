@@ -36,7 +36,7 @@ class CategoryController extends Controller
     public function show(Request $request, $id_slug)
     {
         $category = $this->categoryRepo->findByIdOrSlug($id_slug);
-        $filterNames = ['limit', 'start', 'color', 'category', 'size', 'price_min', 'price_max'];
+        $filterNames = ['color', 'category_id', 'size', 'price_min', 'price_max'];
         return new CategoryShowResource($this->categoryRepo->allProductsPage($category, $request->only($filterNames), 30));
         // return $this->categoryRepo->allProductsPage($category, $request->only($filterNames), 30);
     }
