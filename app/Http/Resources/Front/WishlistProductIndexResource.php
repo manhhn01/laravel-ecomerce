@@ -19,7 +19,7 @@ class WishlistProductIndexResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'price' => $this->price,
-            'salePrice' => $this->sale_price,
+            'sale_price' => $this->sale_price,
             'cover' => $this->cover,
             'variants' => $this->variants
         ];
