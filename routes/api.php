@@ -35,25 +35,25 @@ Route::prefix('/categories')->group(function () {
 /* USER */
 Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
     /* INFO */
-    Route::get('/', function (Request $request) {
-        return $request->user();
-    });
+    Route::get('/', [Front\UserController::class, 'show']);
     Route::patch('/', [Front\UserController::class, 'update']);
+    Route::post('/avatar', [Front\UserController::class, 'uploadAvatar']);
 
     /* CART */
     Route::prefix('/cart')->group(function () {
         Route::get('/', [Front\CartProductController::class, 'index']);
         Route::post('/', [Front\CartProductController::class, 'store']);
         Route::put('/', [Front\CartProductController::class, 'update']);
-        Route::patch('/{id}', [Front\CartProductController::class, 'updateOne']);
+        Route::put('/{id}', [Front\CartProductController::class, 'updateOne']);
         Route::delete('/{id}', [Front\CartProductController::class, 'destroy']);
     });
 
     /* WISHLIST */
     Route::prefix('/wishlist')->group(function () {
-        Route::get('/', []);
-        Route::post('/', []);
-        Route::patch('/', []);
+        Route::get('/', [Front\WishlistProductController::class, 'index']);
+        Route::post('/', [Front\WishlistProductController::class, 'store']);
+        Route::put('/', [Front\WishlistProductController::class, 'update']);
+        Route::delete('/{id}', [Front\WishlistProductController::class, 'destroy']);
     });
 });
 

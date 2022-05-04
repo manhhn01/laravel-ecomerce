@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Front;
 
+use App\Rules\ImageUrl;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+
 
 class UserUpdateRequest extends FormRequest
 {
@@ -23,7 +24,7 @@ class UserUpdateRequest extends FormRequest
             'dob' => ['date', 'date_format:Y-m-d', 'before:today'],
             'phone' => ['regex:/^[+\d]?[0-9]{9,12}$/'],
             'password' => ['min:8', 'max:50'],
-            'avatar' => [],
+            'avatar' => [new ImageUrl],
         ];
     }
 

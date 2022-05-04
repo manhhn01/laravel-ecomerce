@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'dob',
         'phone',
+        'avatar'
     ];
 
     protected $appends = [
@@ -56,6 +57,11 @@ class User extends Authenticatable
     public function cartProducts()
     {
         return $this->belongsToMany(ProductVariant::class, 'cart_products')->withPivot('quantity')->withTimestamps();
+    }
+
+    public function wishlistProducts()
+    {
+        return $this->belongsToMany(Product::class, 'wishlist_products')->withTimestamps();
     }
 
     public function getAvatarAttribute($value)
