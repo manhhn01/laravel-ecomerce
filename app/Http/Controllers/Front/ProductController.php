@@ -19,6 +19,10 @@ class ProductController extends Controller
         $this->productRepo = $productRepo;
     }
 
+    public function index(){
+        return new ProductPaginationCollection(Product::orderByDesc('created_at')->paginate(30));
+    }
+
     public function search(Request $request)
     {
         if (!empty($query = $request->query('q'))) {

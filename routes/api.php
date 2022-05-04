@@ -22,9 +22,7 @@ Route::middleware('throttle:verify_code')->put('/reset_password', [ResetPassword
 
 /* PRODUCT */
 Route::prefix('/products')->group(function () {
-    Route::get('/', function (){
-        return Product::status(1)->get();
-    });
+    Route::get('/', [Front\ProductController::class, 'index']);
     Route::get('/search', [Front\ProductController::class, 'search']);
     Route::get('/{id_slug}', [Front\ProductController::class, 'show']);
 });

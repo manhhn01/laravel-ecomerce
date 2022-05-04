@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Front\Collections;
 
+use App\Http\Resources\Front\ProductIndexResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ProductPaginationCollection extends ResourceCollection
@@ -15,7 +16,7 @@ class ProductPaginationCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection,
+            'data' => ProductIndexResource::collection($this->collection),
             'currentPage' => $this->currentPage(),
             'lastPage' => $this->lastPage(),
             'perPage' => $this->perPage(),
