@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
         foreach ($products as $productData) {
             $tags = Tag::query();
             foreach ($productData['tags'] as $productTag){
-                $tags->orWhere('name', $productData);
+                $tags->orWhere('name', $productTag);
             }
             $tags = $tags->get();
 
