@@ -40,55 +40,6 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Brand
- *
- * @property int $id
- * @property string $name
- * @property string $slug
- * @property string|null $description
- * @property string|null $cover
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Database\Factories\BrandFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|Brand newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Brand newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Brand query()
- * @method static \Illuminate\Database\Eloquent\Builder|Brand whereCover($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Brand whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Brand whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Brand whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Brand whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Brand whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Brand whereUpdatedAt($value)
- */
-	class Brand extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * App\Models\CartProduct
- *
- * @property int $id
- * @property string $user_id
- * @property string $product_variant_id
- * @property int $quantity
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|CartProduct newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CartProduct newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CartProduct query()
- * @method static \Illuminate\Database\Eloquent\Builder|CartProduct whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CartProduct whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CartProduct whereProductVariantId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CartProduct whereQuantity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CartProduct whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CartProduct whereUserId($value)
- */
-	class CartProduct extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
  * App\Models\Category
  *
  * @property int $id
@@ -279,26 +230,27 @@ namespace App\Models{
  * @property string $name
  * @property string $slug
  * @property string $price
- * @property string $sale_price
+ * @property string|null $sale_price
  * @property string $description
  * @property string $cover
  * @property int $status
  * @property int|null $category_id
- * @property int|null $brand_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Brand|null $brand
  * @property-read \App\Models\Category|null $category
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coupon[] $coupon
  * @property-read int|null $coupon_count
  * @property-read mixed $options
- * @property-read string $rating_avg
+ * @property-read mixed $rating_avg
+ * @property-read mixed $related_products
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
  * @property-read int|null $images_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Review[] $publicReviews
  * @property-read int|null $public_reviews_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Review[] $reviews
  * @property-read int|null $reviews_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
+ * @property-read int|null $tags_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductVariant[] $variants
  * @property-read int|null $variants_count
  * @method static \Database\Factories\ProductFactory factory(...$parameters)
@@ -308,7 +260,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Product query()
  * @method static \Illuminate\Database\Eloquent\Builder|Product status($status)
  * @method static \Illuminate\Database\Eloquent\Builder|Product unlisted()
- * @method static \Illuminate\Database\Eloquent\Builder|Product whereBrandId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereCategoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereCover($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Product whereCreatedAt($value)
@@ -514,6 +465,8 @@ namespace App\Models{
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $wishlistProducts
+ * @property-read int|null $wishlist_products_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()

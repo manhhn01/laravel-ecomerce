@@ -8,32 +8,17 @@ use App\Http\Requests\Front\CartProductUpdateRequest;
 use App\Http\Requests\Front\CartProductStoreRequest;
 use App\Http\Requests\Front\CartProductUpdateOneRequest;
 use App\Http\Resources\Front\CartProductResource;
-use App\Repositories\CartProducts\CartProductRepositoryInterface;
 use Illuminate\Http\Request;
 
 class CartProductController extends Controller
 {
-    protected $cartProductRepo;
-    public function __construct(CartProductRepositoryInterface $cartProductRepo){
-        $this->cartProductRepo = $cartProductRepo;
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $user = $request->user();
 
-        return CartProductResource::collection($this->cartProductRepo->getUserCart($user));
+        return CartProductResource::collection($user->cartProducts->load('product'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(CartProductStoreRequest $request)
     {
         $user = $request->user();
@@ -43,32 +28,21 @@ class CartProductController extends Controller
             ['quantity' => $request->quantity ?? 1]
         );
 
-        return CartProductResource::collection($this->cartProductRepo->getUserCart($user));
+        return CartProductResource::collection($user->cartProducts->load('product'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function update(CartProductUpdateRequest $request)
     {
         $user = $request->user();
         $products = collect($request->products);
 
-        $request->user()->cartProducts()->sync(
+        $user->cartProducts()->sync(
             $products->keyBy('product_variant_id')
         );
 
-        return CartProductResource::collection($this->cartProductRepo->getUserCart($user));
+        return CartProductResource::collection($user->cartProducts->load('product'));
     }
 
-    /**
-     * Update cart product quantity
-     * @param  \Illuminate\Http\Request  $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function updateOne(CartProductUpdateOneRequest $request, $id)
     {
         $user = $request->user();
@@ -77,21 +51,15 @@ class CartProductController extends Controller
             'quantity' => $request->quantity
         ]);
 
-        return CartProductResource::collection($this->cartProductRepo->getUserCart($user));
+        return CartProductResource::collection($user->cartProducts->load('product'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param CartProductDestroyRequest $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(CartProductDestroyRequest $request, $id)
     {
         $user = $request->user();
 
         $user->cartProducts()->detach($id);
 
-        return CartProductResource::collection($this->cartProductRepo->getUserCart($user));
+        return CartProductResource::collection($user->cartProducts->load('product'));
     }
 }
