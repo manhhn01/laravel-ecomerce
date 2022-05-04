@@ -29,7 +29,6 @@ class UserUpdateRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        dd($this->all());
         if(empty($this->all())){
             throw ValidationException::withMessages(["inputs" => "Invalid data"]);
         }

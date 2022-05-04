@@ -53,19 +53,28 @@ class User extends Authenticatable
         'avatar' => 'images/users/default-user.png'
     ];
 
-    public function cartProducts(){
+    public function cartProducts()
+    {
         return $this->belongsToMany(ProductVariant::class, 'cart_products')->withPivot('quantity')->withTimestamps();
     }
 
-    public function getAvatarAttribute($value){
+    public function getAvatarAttribute($value)
+    {
         return asset("storage/$value");
     }
 
-    public function getFullNameAttribute($value){
-        return $this->first_name.' '.$this->last_name;
+    public function getEmailAttribute($value)
+    {
+        return preg_replace("/(?!^).(?=[^@]+@)/", "*", $value);
     }
 
-    public function isAdmin(){
+    public function getFullNameAttribute($value)
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function isAdmin()
+    {
         return $this->role_id == 0;
     }
 }

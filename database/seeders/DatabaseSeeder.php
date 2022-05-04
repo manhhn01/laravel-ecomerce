@@ -19,22 +19,21 @@ class DatabaseSeeder extends Seeder
      * @var User
      */
     protected $customers;
+
     /**
      * @var Category
      */
     protected $categories;
+
     /**
      * @var Color
      */
     protected $colors;
+
     /**
      * @var Size
      */
     protected $sizes;
-    /**
-     * @var Tag
-     */
-    protected $tags;
 
     /**
      * Seed the application's database.
@@ -53,7 +52,6 @@ class DatabaseSeeder extends Seeder
         $this->categories = Category::all();
         $this->colors = Color::all();
         $this->sizes = Size::all();
-        $this->tags = Tag::all();
 
         $femaleProducts = json_decode(file_get_contents(__DIR__ . "/data/product-female.json"), true);
         $maleProducts = json_decode(file_get_contents(__DIR__ . "/data/product-male.json"), true);
@@ -67,8 +65,12 @@ class DatabaseSeeder extends Seeder
     protected function createProducts($products)
     {
         foreach ($products as $productData) {
-            // print_r('Create product:');
-            // print_r($productData);
+            $tags = Tag::query();
+            foreach ($productData['tags'] as $productTag){
+                $tags->orWhere('name', $productData);
+            }
+            $tags = $tags->get();
+
             $product = Product::factory([
                 'name' => $productData['name'],
                 'slug' => $productData['slug'],
@@ -81,6 +83,7 @@ class DatabaseSeeder extends Seeder
                     Review::factory(5)
                         ->for($this->customers->random())
                 )
+                ->hasAttached($tags)
                 ->for($this->categories->firstWhere('name', $productData['category']))
                 ->create();
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTagProductTable extends Migration
+class CreateProductTagTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTagProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('tag_product', function (Blueprint $table) {
+        Schema::create('product_tag', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('tag_id')->constrained();
@@ -30,6 +30,6 @@ class CreateTagProductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tag_product');
+        Schema::dropIfExists('product_tag');
     }
 }

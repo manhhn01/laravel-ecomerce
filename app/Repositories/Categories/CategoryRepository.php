@@ -3,6 +3,7 @@
 namespace App\Repositories\Categories;
 
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Cache;
@@ -51,12 +52,9 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             $products = $this->productsFilter($products, $filters);
         }
 
-        return collect($category)->merge([
-            'children' => $category->children->makeHidden(['description', 'cover']),
-            'products' => $products->paginate($perPage)->tap(function($products){
-                $products->makeHidden(['reviews', 'publicReviews', 'laravel_through_key']);
-            }),
-        ]);
+        return $category->setAttribute('products', $products->paginate($perPage)->tap(function ($products) {
+            $products->makeHidden(['reviews', 'publicReviews', 'laravel_through_key']);
+        }));
     }
 
     public function productsFilter($productsQuery, $filter)
@@ -88,17 +86,18 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
                 });
 
         if (isset($filters['color'])) {
-            $colors = explode(',', $filters['color']);
+            $colorTags = explode(',', $filters['color']);
             $productsQuery
-                ->whereHas('variants', function ($q) use($colors){
-                    return $q->whereIn('color_id', $colors);
+                ->whereHas('variants', function ($q) use ($colorTags) {
+                    // todo
+                    return $q->whereIn('color_id', $colorTags);
                 });
         }
 
         if (isset($filters['size'])) {
             $sizes = explode(',', $filters['size']);
             $productsQuery
-                ->whereHas('variants', function ($q) use($sizes){
+                ->whereHas('variants', function ($q) use ($sizes) {
                     return $q->whereIn('size_id', $sizes);
                 });
         }

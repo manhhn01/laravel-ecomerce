@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Front\ProductShowResource;
 use App\Models\Product;
 use App\Repositories\Products\ProductRepositoryInterface;
 use Illuminate\Http\Request;
@@ -39,9 +40,9 @@ class ProductController extends Controller
     {
         $product = $this->productRepo->findByIdOrSlug($id_slug);
         if ($product->status == 1)
-            return $product
-                ->load('images', 'category:id,parent_id,slug,name', 'publicReviews.user', 'variants')
-                ->loadCount('publicReviews');
+            return new ProductShowResource($product
+                ->load('images', 'categoryWithParent', 'publicReviews.user', 'variants')
+            );
         else
             throw new NotFoundHttpException('Product not found');
     }

@@ -14,14 +14,21 @@ class Product extends Model
         'name', 'slug', 'description', 'status'
     ];
 
-    protected $with = ['reviews'];
-    protected $appends = ['rating_avg'];
-
     protected $hidden = ['category_id'];
+
+    protected $with = ['reviews'];
+
+    protected $appends = ['rating_avg', 'options'];
+
 
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function categoryWithParent()
+    {
+        return $this->category()->with('parent');
     }
 
     public function coupon()
@@ -49,8 +56,13 @@ class Product extends Model
         return $this->morphMany(Image::class, 'imageable');
     }
 
-    public function rootCategory(){
+    public function rootCategory()
+    {
         return $this->category->parent();
+    }
+
+    public function tags(){
+        return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 
     /**
@@ -65,6 +77,26 @@ class Product extends Model
     public function getCoverAttribute($value)
     {
         return asset("storage/$value");
+    }
+
+    public function getOptionsAttribute()
+    {
+        $colors = collect();
+        $sizes = collect();
+
+        $this->variants->each(function ($variant) use ($colors, $sizes) {
+            $colors = $colors->push(['id' => $variant->color->id, 'name' => $variant->color->name]);
+            $sizes = $sizes->push(['id' => $variant->size->id, 'name' => $variant->size->name]);
+        });
+
+        return [
+            'colors' => $colors->unique(function ($color) {
+                return $color['id'];
+            })->values(),
+            'sizes' => $sizes->unique(function ($size) {
+                return $size['id'];
+            })->values()
+        ];
     }
 
     public function toSearchableArray()

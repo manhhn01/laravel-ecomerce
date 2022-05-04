@@ -16,15 +16,15 @@ class CartProductResource extends JsonResource
     {
         return [
             'id' => $this->product->id,
-            'variant_id' => $this->id,
+            'variantId' => $this->variant_id,
             'name' => $this->product->name,
             'slug' => $this->product->slug,
-            'cart_quantity' => $this->pivot->quantity,
-            'remain_quantity' => $this->quantity,
+            'cartQuantity' => $this->pivot->quantity,
+            'remainQuantity' => $this->quantity,
             'color' => $this->color,
             'size' => $this->size,
             'price' => $this->product->price,
-            'sale_price' => $this->product->sale_price,
+            'salePrice' => $this->product->sale_price,
         ];
     }
 }
