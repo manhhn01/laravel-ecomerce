@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ProductPublic;
 use Illuminate\Foundation\Http\FormRequest;
 
 class WishlistProductStoreRequest extends FormRequest
@@ -14,7 +15,7 @@ class WishlistProductStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => ['required', 'exists:products,id', 'unique:wishlist_products'],
+            'product_id' => ['required', 'exists:products,id', 'unique:wishlist_products', new ProductPublic],
         ];
     }
 }

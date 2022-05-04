@@ -109,4 +109,8 @@ class Product extends Model
             'name' => $this->name
         ];
     }
+
+    public function isPublic(){
+        return $this->status == 1;
+    }
 }

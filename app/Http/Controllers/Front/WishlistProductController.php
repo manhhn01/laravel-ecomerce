@@ -14,7 +14,7 @@ class WishlistProductController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        return WishlistProductIndexResource::collection($user->wishlistProducts);
+        return WishlistProductIndexResource::collection($user->wishlistPublicProducts);
     }
 
     public function store(WishlistProductStoreRequest $request)
@@ -25,7 +25,7 @@ class WishlistProductController extends Controller
             $request->product_id
         );
 
-        return WishlistProductIndexResource::collection($user->wishlistProducts);
+        return WishlistProductIndexResource::collection($user->wishlistPublicProducts);
     }
 
     public function update(WishlistProductUpdateRequest $request)
@@ -37,7 +37,7 @@ class WishlistProductController extends Controller
             $products->pluck('product_id')
         );
 
-        return WishlistProductIndexResource::collection($user->wishlistProducts);
+        return WishlistProductIndexResource::collection($user->wishlistPublicProducts);
     }
 
     public function destroy(WishlistProductDestroyRequest $request, $id)
@@ -46,6 +46,6 @@ class WishlistProductController extends Controller
 
         $user->wishlistProducts()->detach($id);
 
-        return WishlistProductIndexResource::collection($user->wishlistProducts);
+        return WishlistProductIndexResource::collection($user->wishlistPublicProducts);
     }
 }

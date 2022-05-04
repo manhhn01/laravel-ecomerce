@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface CartProductRepositoryInterface
 {
+    /**
+     * @param User $user
+     * @return Collection
+     */
+    public function getUserCart($user);
 }

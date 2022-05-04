@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Front;
 
+use App\Rules\VariantPublic;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CartProductDestroyRequest extends FormRequest

@@ -59,9 +59,17 @@ class User extends Authenticatable
         return $this->belongsToMany(ProductVariant::class, 'cart_products')->withPivot('quantity')->withTimestamps();
     }
 
+    public function cartPublicProducts(){
+        return $this->cartProducts()->status(1);
+    }
+
     public function wishlistProducts()
     {
         return $this->belongsToMany(Product::class, 'wishlist_products')->withTimestamps();
+    }
+
+    public function wishlistPublicProducts(){
+        return $this->wishlistProducts()->status(1);
     }
 
     public function getAvatarAttribute($value)

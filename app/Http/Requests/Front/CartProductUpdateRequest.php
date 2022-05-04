@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Front;
 
+use App\Rules\VariantPublic;
 use App\Rules\VariantQuantity;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -17,7 +18,7 @@ class CartProductUpdateRequest extends FormRequest
         return [
             'products' => ['required', 'array', 'min:1'],
             'products.*' => [resolve(VariantQuantity::class)],
-            'products.*.product_variant_id' => ['required', 'exists:product_variants,id', 'distinct'],
+            'products.*.product_variant_id' => ['required', 'exists:product_variants,id', 'distinct', new VariantPublic],
             'products.*.quantity' => ['nullable', 'integer', 'min:1'],
         ];
     }
