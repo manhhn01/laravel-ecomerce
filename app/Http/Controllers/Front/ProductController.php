@@ -44,6 +44,7 @@ class ProductController extends Controller
             return new ProductShowResource(
                 $product
                     ->load('images', 'categoryWithParent', 'publicReviews.user', 'variants', 'tags')
+                    ->append('relatedProducts')
             );
         else
             throw new NotFoundHttpException('Product not found');

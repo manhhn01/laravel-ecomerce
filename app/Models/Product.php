@@ -61,13 +61,10 @@ class Product extends Model
         return $this->category->parent();
     }
 
-    public function tags(){
+    public function tags()
+    {
         return $this->belongsToMany(Tag::class)->withTimestamps();
     }
-
-    /**
-     * @return string
-     */
 
     public function getRatingAvgAttribute()
     {
@@ -97,6 +94,13 @@ class Product extends Model
                 return $size['id'];
             })->values()
         ];
+    }
+
+    public function getRelatedProductsAttribute()
+    {
+        return self::whereHas('tags', function ($q) {
+            return $q->whereIn('name', $this->tags->pluck('name'));
+        })->limit(20)->get();
     }
 
     public function toSearchableArray()
