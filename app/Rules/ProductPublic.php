@@ -37,6 +37,6 @@ class ProductPublic implements Rule
      */
     public function message()
     {
-        return 'The selected :attribute is invalid.';
+        return 'The selected product is not public.';
     }
 }
