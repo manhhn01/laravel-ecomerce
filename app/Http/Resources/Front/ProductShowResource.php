@@ -28,8 +28,9 @@ class ProductShowResource extends JsonResource
             'options' => $this->whenAppended('options'),
             'variants' => $this->whenLoaded('variants'),
             'images' => $this->whenLoaded('images'),
+            'tags' => $this->whenLoaded('tags')->makeHidden('pivot'),
             'category' => $this->whenLoaded('categoryWithParent'),
-            'reviews' => ReviewResource::collection($this->whenLoaded('publicReviews'))
+            'reviews' => ReviewResource::collection($this->whenLoaded('publicReviews')),
         ];
     }
 }

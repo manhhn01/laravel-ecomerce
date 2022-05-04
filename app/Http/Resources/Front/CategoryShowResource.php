@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Front;
 
+use App\Http\Resources\Front\Collections\ProductPaginationCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CategoryShowResource extends JsonResource
@@ -20,7 +21,7 @@ class CategoryShowResource extends JsonResource
             'slug' => $this->slug,
             'description' => $this->description,
             'cover' => $this->cover,
-            'products' => ProductIndexResource::collection($this->when(isset($this->products), $this->products)),
+            'products' => new ProductPaginationCollection($this->when(isset($this->products), $this->products)),
             'children' => $this->whenLoaded('children')
         ];
     }

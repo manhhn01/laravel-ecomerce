@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Front\Collections\ProductPaginationCollection;
 use App\Http\Resources\Front\ProductShowResource;
 use App\Models\Product;
 use App\Repositories\Products\ProductRepositoryInterface;
@@ -33,15 +34,16 @@ class ProductController extends Controller
                 });
         }
 
-        return $products ?? (new LengthAwarePaginator([], 0, 30))->withPath($request->url());
+        return new ProductPaginationCollection($products ?? (new LengthAwarePaginator([], 0, 30)));
     }
 
     public function show($id_slug)
     {
         $product = $this->productRepo->findByIdOrSlug($id_slug);
         if ($product->status == 1)
-            return new ProductShowResource($product
-                ->load('images', 'categoryWithParent', 'publicReviews.user', 'variants')
+            return new ProductShowResource(
+                $product
+                    ->load('images', 'categoryWithParent', 'publicReviews.user', 'variants', 'tags')
             );
         else
             throw new NotFoundHttpException('Product not found');
