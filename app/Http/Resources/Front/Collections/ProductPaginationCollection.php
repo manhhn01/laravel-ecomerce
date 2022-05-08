@@ -4,6 +4,7 @@ namespace App\Http\Resources\Front\Collections;
 
 use App\Http\Resources\Front\ProductIndexResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\ResourceResponse;
 
 class ProductPaginationCollection extends ResourceCollection
 {
@@ -21,5 +22,14 @@ class ProductPaginationCollection extends ResourceCollection
             'last_page' => $this->lastPage(),
             'per_page' => $this->perPage(),
         ];
+    }
+
+    public function toResponse($request)
+    {
+        // if ($this->resource instanceof AbstractPaginator || $this->resource instanceof AbstractCursorPaginator) {
+        //     return $this->preparePaginatedResponse($request);
+        // }
+        // return parent::toResponse($request);
+        return (new ResourceResponse($this))->toResponse($request);
     }
 }

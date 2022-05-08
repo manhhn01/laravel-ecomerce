@@ -10,16 +10,14 @@ use Laravel\Scout\Searchable;
 class Product extends Model
 {
     use HasFactory, Searchable, StatusScope;
-    protected $fillable = [
-        'name', 'slug', 'description', 'status'
-    ];
-
+    protected $fillable = ['name', 'slug', 'description', 'status'];
     protected $hidden = ['category_id'];
-
     protected $with = ['reviews'];
-
     protected $appends = ['rating_avg', 'options'];
-
+    protected $casts = [
+        'price' => 'float',
+        'sale_price' => 'float'
+    ];
 
     public function category()
     {
@@ -82,7 +80,7 @@ class Product extends Model
         $sizes = collect();
 
         $this->variants->each(function ($variant) use ($colors, $sizes) {
-            $colors = $colors->push(['id' => $variant->color->id, 'name' => $variant->color->name]);
+            $colors = $colors->push(['id' => $variant->color->id, 'name' => $variant->color->name, 'cover' => $variant->cover]);
             $sizes = $sizes->push(['id' => $variant->size->id, 'name' => $variant->size->name]);
         });
 
@@ -110,7 +108,8 @@ class Product extends Model
         ];
     }
 
-    public function isPublic(){
+    public function isPublic()
+    {
         return $this->status == 1;
     }
 }

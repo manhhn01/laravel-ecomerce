@@ -13,11 +13,16 @@ class Review extends Model
     protected $hidden = ['product_id', 'user_id'];
 
     protected $fillable = [
-        'comment', 'rating', 'like', 'status'
+        'comment', 'rating', 'user_id'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'user_review_likes', 'user_id', 'review_id');
     }
 }

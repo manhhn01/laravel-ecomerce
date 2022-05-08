@@ -12,16 +12,13 @@ class ProductController extends Controller
 {
     protected $productRepo;
     protected $categoryRepo;
-    protected $brandRepo;
 
     public function __construct(
         ProductRepositoryInterface $product,
-        CategoryRepositoryInterface $category,
-        BrandRepositoryInterface $brand
+        CategoryRepositoryInterface $category
     ) {
         $this->productRepo = $product;
         $this->categoryRepo = $category;
-        $this->brandRepo = $brand;
     }
 
     /**

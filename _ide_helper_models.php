@@ -128,6 +128,26 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\District
+ *
+ * @property int $id
+ * @property int $province_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\DistrictFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|District newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|District newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|District query()
+ * @method static \Illuminate\Database\Eloquent\Builder|District whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|District whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|District whereProvinceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|District whereUpdatedAt($value)
+ */
+	class District extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Image
  *
  * @property int $id
@@ -312,6 +332,28 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Province
+ *
+ * @property int $id
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\District[] $districts
+ * @property-read int|null $districts_count
+ * @method static \Database\Factories\ProvinceFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Province newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Province newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Province query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Province whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Province whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Province whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Province whereUpdatedAt($value)
+ */
+	class Province extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\ReceivedNote
  *
  * @property int $id
@@ -487,5 +529,27 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
 	class User extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Ward
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $district_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\WardFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ward newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Ward newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Ward query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Ward whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ward whereDistrictId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ward whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ward whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ward whereUpdatedAt($value)
+ */
+	class Ward extends \Eloquent {}
 }
 

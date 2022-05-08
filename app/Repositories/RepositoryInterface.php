@@ -56,7 +56,7 @@ interface RepositoryInterface
     public function latest($limit = null);
 
     /**
-     * @return Collection
+     * @return Model
      * @throws ModelNotFoundException
      */
     public function findByIdOrSlug($idSlug);
