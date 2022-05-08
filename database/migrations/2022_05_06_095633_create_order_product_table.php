@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserReviewLikesTable extends Migration
+class CreateOrderProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,14 @@ class CreateUserReviewLikesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_review_likes', function (Blueprint $table) {
+        Schema::create('order_product', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('order_id')->constrained();
+            $table->foreignId('product_variant_id')->constrained();
+            $table->decimal('price', 15, 2);
+            $table->smallInteger('quantity');
+
             $table->timestamps();
         });
     }
@@ -26,6 +32,6 @@ class CreateUserReviewLikesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_review_likes');
+        Schema::dropIfExists('order_product');
     }
 }

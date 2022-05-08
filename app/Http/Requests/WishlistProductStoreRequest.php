@@ -15,7 +15,7 @@ class WishlistProductStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => ['required', 'exists:products,id', 'unique:wishlist_products', new ProductPublic],
+            'product_id' => ['required', 'exists:products,id', 'unique:wishlist_product', new ProductPublic],
         ];
     }
 }

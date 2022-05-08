@@ -501,14 +501,14 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductVariant[] $cartProducts
- * @property-read int|null $cart_products_count
+ * @property-read int|null $cart_product_count
  * @property-read mixed $full_name
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $wishlistProducts
- * @property-read int|null $wishlist_products_count
+ * @property-read int|null $wishlist_product_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()

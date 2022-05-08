@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function cartProducts()
     {
-        return $this->belongsToMany(ProductVariant::class, 'cart_products')->withPivot('quantity')->withTimestamps();
+        return $this->belongsToMany(ProductVariant::class)->withPivot('quantity')->withTimestamps();
     }
 
     public function cartPublicProducts(){
@@ -67,7 +67,7 @@ class User extends Authenticatable
 
     public function wishlistProducts()
     {
-        return $this->belongsToMany(Product::class, 'wishlist_products')->withTimestamps();
+        return $this->belongsToMany(Product::class)->withTimestamps();
     }
 
     public function wishlistPublicProducts(){

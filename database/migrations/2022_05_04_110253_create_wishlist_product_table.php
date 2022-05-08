@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderProductsTable extends Migration
+class CreateWishlistProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateOrderProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_products', function (Blueprint $table) {
+        Schema::create('wishlist_product', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('order_id')->constrained();
-            $table->foreignId('product_variant_id')->constrained();
-            $table->decimal('price', 15, 2);
-            $table->smallInteger('quantity');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
 
             $table->timestamps();
         });
@@ -32,6 +30,6 @@ class CreateOrderProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_products');
+        Schema::dropIfExists('wishlist_product');
     }
 }

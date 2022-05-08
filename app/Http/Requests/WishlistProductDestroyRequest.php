@@ -15,7 +15,7 @@ class WishlistProductDestroyRequest extends FormRequest
     {
         return [
             'product_id' => [
-                'required', 'exists:products,id', 'exists:wishlist_products,product_id',
+                'required', 'exists:products,id', 'exists:wishlist_product,product_id',
             ],
         ];
     }

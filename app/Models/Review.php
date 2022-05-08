@@ -23,6 +23,6 @@ class Review extends Model
 
     public function likes()
     {
-        return $this->belongsToMany(User::class, 'user_review_likes', 'user_id', 'review_id');
+        return $this->belongsToMany(User::class, 'user_review_like', 'user_id', 'review_id');
     }
 }

@@ -16,7 +16,7 @@ class CartProductDestroyRequest extends FormRequest
     {
         return [
             'product_variant_id' => [
-                'required', 'exists:product_variants,id', 'exists:cart_products,product_variant_id',
+                'required', 'exists:product_variants,id', 'exists:cart_product,product_variant_id',
             ],
         ];
     }

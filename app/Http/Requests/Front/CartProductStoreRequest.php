@@ -15,7 +15,7 @@ class CartProductStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_variant_id' => ['required', 'exists:product_variants,id', 'unique:cart_products', new VariantPublic],
+            'product_variant_id' => ['required', 'exists:product_variants,id', 'unique:cart_product', new VariantPublic],
             'quantity'=> ['nullable', 'integer', 'min:1']
         ];
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCartProductsTable extends Migration
+class CreateUserReviewLikeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,8 @@ class CreateCartProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cart_products', function (Blueprint $table) {
+        Schema::create('user_review_like', function (Blueprint $table) {
             $table->id();
-
-            $table->string('user_id')->constrained();
-            $table->foreignId('product_variant_id')->constrained()->cascadeOnDelete();
-            $table->smallInteger('quantity')->default(1);
-
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ class CreateCartProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cart_products');
+        Schema::dropIfExists('user_review_like');
     }
 }
