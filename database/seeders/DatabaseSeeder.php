@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ColorSeeder::class);
         $this->call(SizeSeeder::class);
         $this->call(TagSeeder::class);
+        $this->call(SubdivisionSeeder::class);
 
         $this->customers = User::where('role_id', '!=', 0)->get();
         $this->categories = Category::all();

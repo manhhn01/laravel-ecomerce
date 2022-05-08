@@ -39,6 +39,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'email_verified_at',
+        'role_id'
     ];
 
     /**
@@ -72,6 +74,14 @@ class User extends Authenticatable
         return $this->wishlistProducts()->status(1);
     }
 
+    public function addresses(){
+        return $this->hasMany(Address::class);
+    }
+
+    public function reviews(){
+        return $this->hasMany(Review::class);
+    }
+
     public function getAvatarAttribute($value)
     {
         return asset("storage/$value");
@@ -79,6 +89,9 @@ class User extends Authenticatable
 
     public function getEmailAttribute($value)
     {
+        if(auth()->check()){
+            return $value;
+        }
         return preg_replace("/(?!^).(?=[^@]+@)/", "*", $value);
     }
 

@@ -25,6 +25,14 @@ Route::prefix('/products')->group(function () {
     Route::get('/', [Front\ProductController::class, 'index']);
     Route::get('/search', [Front\ProductController::class, 'search']);
     Route::get('/{id_slug}', [Front\ProductController::class, 'show']);
+
+    /* REVIEW */
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::put('{id_slug}/reviews/{review_id}', [Front\ProductController::class, 'likeReview']);
+        Route::post('{id_slug}/review', [Front\ProductController::class, 'storeReview']);
+        // Route::put('/review', [Front\ProductController::class, 'updateReview']);
+        // Route::delete('/review', [Front\ProductController::class, 'destroyReview']);
+    });
 });
 
 /* CATEGORY */
@@ -56,6 +64,15 @@ Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
         Route::post('/', [Front\WishlistProductController::class, 'store']);
         Route::put('/', [Front\WishlistProductController::class, 'update']);
         Route::delete('/{id}', [Front\WishlistProductController::class, 'destroy']);
+    });
+
+    /* ADDRESS */
+    Route::prefix('/addresses')->group(function () {
+        Route::get('/', [Front\AddressController::class, 'index']);
+        Route::post('/', [Front\AddressController::class, 'store']);
+        Route::put('/{id}', [Front\AddressController::class, 'update'])->whereNumber('id');
+        Route::delete('/{id}', [Front\AddressController::class, 'destroy'])->whereNumber('id');
+        Route::get('/child_divisions', [Front\AddressController::class, 'childDivisionsList']);
     });
 });
 
