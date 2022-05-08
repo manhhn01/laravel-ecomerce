@@ -26,7 +26,7 @@ class VariantPublic implements Rule
      */
     public function passes($attribute, $value)
     {
-        $variant = ProductVariant::find($value);
+        $variant = ProductVariant::findOrFail($value);
         return $variant->product->isPublic();
     }
 

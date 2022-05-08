@@ -19,8 +19,8 @@ class CreateAddressesTable extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('ward_id')->nullable()->constrained()->nullOnDelete();
             $table->string('address');
-            $table->float('lat', 8, 4)->nullable();
-            $table->float('lon', 8, 4)->nullable();
+            $table->float('lat', 7, 4)->nullable();
+            $table->float('lon', 7, 4)->nullable();
             $table->string('phone');
 
             $table->timestamps();
