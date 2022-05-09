@@ -71,18 +71,19 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
                         ->whereNull('sale_price')
                         ->where('price', '>', $filters['price_min']);
                 });
+        // dd($productsQuery->get());
 
         if (isset($filters['price_max']))
             $productsQuery
                 ->where(function ($q) use ($filters) {
                     return $q
                         ->whereNotNull('sale_price')
-                        ->where('sale_price', '>', $filters['price_max']);
+                        ->where('sale_price', '<', $filters['price_max']);
                 })
                 ->orWhere(function ($q) use ($filters) {
                     return $q
                         ->whereNull('sale_price')
-                        ->where('price', '>', $filters['price_max']);
+                        ->where('price', '<', $filters['price_max']);
                 });
 
         if (isset($filters['color'])) {
