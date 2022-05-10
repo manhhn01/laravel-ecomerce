@@ -61,24 +61,28 @@ class User extends Authenticatable
         return $this->belongsToMany(ProductVariant::class)->withPivot('quantity')->withTimestamps();
     }
 
-    public function cartPublicProducts(){
+    public function cartPublicProducts()
+    {
         return $this->cartProducts()->status(1);
     }
 
     public function wishlistProducts()
     {
-        return $this->belongsToMany(Product::class)->withTimestamps();
+        return $this->belongsToMany(Product::class, 'wishlist_product')->withTimestamps();
     }
 
-    public function wishlistPublicProducts(){
+    public function wishlistPublicProducts()
+    {
         return $this->wishlistProducts()->status(1);
     }
 
-    public function addresses(){
+    public function addresses()
+    {
         return $this->hasMany(Address::class);
     }
 
-    public function reviews(){
+    public function reviews()
+    {
         return $this->hasMany(Review::class);
     }
 
@@ -89,7 +93,7 @@ class User extends Authenticatable
 
     public function getEmailAttribute($value)
     {
-        if(auth()->check()){
+        if (auth('sanctum')->check()) {
             return $value;
         }
         return preg_replace("/(?!^).(?=[^@]+@)/", "*", $value);
@@ -99,6 +103,16 @@ class User extends Authenticatable
     {
         return $this->first_name . ' ' . $this->last_name;
     }
+
+    // public function getGenderAttribute($value)
+    // {
+    //     return $value ? 'Nam' : 'Nữ';
+    // }
+
+    // public function setGenderAttribute($value)
+    // {
+    //     $this->attributes['gender'] = $value == 'Nam';
+    // }
 
     public function isAdmin()
     {

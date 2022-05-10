@@ -18,7 +18,8 @@ class ReviewResource extends JsonResource
             'id' => $this->id,
             'rating' => $this->rating,
             'comment' => $this->comment,
-            'like' => $this->like,
+            'likes_count' => $this->likes->count(),
+            'liked' => $this->liked,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'author' => new UserResource($this->user)

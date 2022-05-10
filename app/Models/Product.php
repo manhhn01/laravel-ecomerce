@@ -64,6 +64,10 @@ class Product extends Model
         return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 
+    public function wishlistUsers(){
+        return $this->belongsToMany(User::class, 'wishlist_product')->withTimestamps();
+    }
+
     public function getRatingAvgAttribute()
     {
         return round_down($this->reviews->where('status', 1)->avg('rating'), 0.5);
@@ -80,8 +84,8 @@ class Product extends Model
         $sizes = collect();
 
         $this->variants->each(function ($variant) use ($colors, $sizes) {
-            $colors = $colors->push(['id' => $variant->color->id, 'name' => $variant->color->name, 'cover' => $variant->cover]);
-            $sizes = $sizes->push(['id' => $variant->size->id, 'name' => $variant->size->name]);
+            $colors = $colors->push(['id' => $variant->color_id, 'name' => $variant->color->name, 'cover' => $variant->cover]);
+            $sizes = $sizes->push(['id' => $variant->size_id, 'name' => $variant->size->name]);
         });
 
         return [
@@ -94,17 +98,11 @@ class Product extends Model
         ];
     }
 
-    public function getRelatedProductsAttribute()
-    {
-        return self::whereHas('tags', function ($q) {
-            return $q->whereIn('name', $this->tags->pluck('name'));
-        })->limit(20)->get();
-    }
-
     public function toSearchableArray()
     {
         return [
-            'name' => $this->name
+            'name' => $this->name,
+            // 'description' => $this->description
         ];
     }
 

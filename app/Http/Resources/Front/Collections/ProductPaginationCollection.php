@@ -20,7 +20,7 @@ class ProductPaginationCollection extends ResourceCollection
             'data' => ProductIndexResource::collection($this->collection),
             'current_page' => $this->currentPage(),
             'last_page' => $this->lastPage(),
-            'per_page' => $this->perPage(),
+            'per_page' => intval($this->perPage()),
         ];
     }
 

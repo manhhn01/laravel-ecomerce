@@ -30,4 +30,11 @@ interface ProductRepositoryInterface extends RepositoryInterface
      * @throws TableConstraintException
      */
     public function delete($id);
+
+    /**
+     * @param Product $product
+     * @param int $limit
+     * @return Collection
+     */
+    public function relatedProducts($product, $limit = 20);
 }

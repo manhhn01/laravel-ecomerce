@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Front\ReviewStoreRequest;
 use App\Http\Resources\Front\Collections\ProductPaginationCollection;
+use App\Http\Resources\Front\ProductIndexResource;
 use App\Http\Resources\Front\ProductShowResource;
 use App\Http\Resources\Front\ReviewResource;
 use App\Models\Product;
 use App\Repositories\Products\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class ProductController extends Controller
 {
@@ -20,9 +24,13 @@ class ProductController extends Controller
         $this->productRepo = $productRepo;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return new ProductPaginationCollection(Product::orderByDesc('created_at')->paginate(30));
+        return new ProductPaginationCollection(
+            Product::with('variants')
+                ->orderByDesc('created_at')
+                ->paginate($request->query('perpage', 30))
+        );
     }
 
     public function search(Request $request)
@@ -50,28 +58,51 @@ class ProductController extends Controller
         if ($product->status == 1)
             return new ProductShowResource(
                 $product
-                    ->load('images', 'categoryWithParent', 'publicReviews.user', 'variants', 'tags')
-                    ->append('relatedProducts')
+                    ->load('images', 'categoryWithParent', 'publicReviews.user', 'publicReviews.likes', 'variants', 'tags')
             );
         else
             throw new NotFoundHttpException('Product not found');
     }
 
+    public function relatedProducts($id_slug)
+    {
+        $product = $this->productRepo->findByIdOrSlug($id_slug);
+
+        return ProductIndexResource::collection($this->productRepo->relatedProducts($product));
+    }
+
+    public function productReviews($id_slug)
+    {
+        $product = $this->productRepo->findByIdOrSlug($id_slug);
+
+        return ReviewResource::collection($product->publicReviews);
+    }
+
     public function likeReview(Request $request, $id_slug, $review_id)
     {
         $user = $request->user();
-        /** @var \App\Models\Product */
         $product = $this->productRepo->findByIdOrSlug($id_slug);
+        $review = $product->reviews()->findOrFail($review_id);
 
-        $product->reviews()->find($review_id)->likes();
+        if ($request->like) {
+            $review->likes()->syncWithoutDetaching($user->id);
+        } else {
+            $review->likes()->detach($user->id);
+        }
 
+        return new ReviewResource($review);
     }
 
-    public function storeReview(Request $request, $id_slug)
+    public function storeReview(ReviewStoreRequest $request, $id_slug)
     {
         $user = $request->user();
         $product = $this->productRepo->findByIdOrSlug($id_slug);
-        $attributes = $request->only(['comment', 'rating' ]);
+
+        if ($product->reviews()->where('user_id', $user->id)->exists()) {
+            throw new UnprocessableEntityHttpException('You\'ve reviewed this product before.');
+        }
+
+        $attributes = $request->only(['comment', 'rating']);
 
         $attributes = array_merge($attributes, ['user_id' => $user->id]);
         $review = $product->reviews()->create($attributes);

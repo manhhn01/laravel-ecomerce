@@ -14,10 +14,10 @@ class ProductController extends Controller
     protected $categoryRepo;
 
     public function __construct(
-        ProductRepositoryInterface $product,
+        ProductRepositoryInterface $productRepo,
         CategoryRepositoryInterface $category
     ) {
-        $this->productRepo = $product;
+        $this->productRepo = $productRepo;
         $this->categoryRepo = $category;
     }
 

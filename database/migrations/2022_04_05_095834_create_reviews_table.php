@@ -20,7 +20,6 @@ class CreateReviewsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->tinyInteger('rating');
             $table->text('comment');
-            $table->tinyInteger('like')->default(0);
             $table->boolean('status')->default(0);
 
             $table->timestamps();

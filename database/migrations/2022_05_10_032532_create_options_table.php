@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserReviewLikeTable extends Migration
+class CreateOptionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateUserReviewLikeTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_review_like', function (Blueprint $table) {
+        Schema::create('options', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('review_id')->constrained()->cascadeOnDelete();
+            $table->string('name')->unique();
+            $table->longText('value')->nullable();
 
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ class CreateUserReviewLikeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_review_like');
+        Schema::dropIfExists('options');
     }
 }

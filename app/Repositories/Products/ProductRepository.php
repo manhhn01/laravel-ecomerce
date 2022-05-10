@@ -99,4 +99,11 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         return $this->model->where('id', $id_sku)->orWhere('sku', $id_sku)->first();
     }
+
+    public function relatedProducts($product, $limit = 20)
+    {
+        return $this->model->with(['variants', 'tags'])->whereHas('tags', function ($q) use ($product) {
+            return $q->whereIn('name', $product->tags->pluck('name'));
+        })->limit($limit)->get();
+    }
 }

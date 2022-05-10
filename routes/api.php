@@ -20,18 +20,27 @@ Route::middleware('throttle:email')->post('/forgot', [ResetPasswordController::c
 Route::middleware('throttle:verify_code')->post('/reset_password/verify', [ResetPasswordController::class, 'verifyCode']);
 Route::middleware('throttle:verify_code')->put('/reset_password', [ResetPasswordController::class, 'resetPassword']);
 
+/* HOME PAGE */
+Route::get('/banners', [Front\HomeController::class, 'banners']);
+Route::get('/home_nav', [Front\HomeController::class, 'nav']);
+Route::get('/collections', [Front\HomeController::class, 'collections']);
+Route::get('/flash_sale', [Front\HomeController::class, 'sale']);
+Route::get('/trending_search', [Front\HomeController::class, 'trending']);
+
 /* PRODUCT */
 Route::prefix('/products')->group(function () {
     Route::get('/', [Front\ProductController::class, 'index']);
     Route::get('/search', [Front\ProductController::class, 'search']);
-    Route::get('/{id_slug}', [Front\ProductController::class, 'show']);
+    Route::prefix('/{id_slug}')->group(function () {
+        Route::get('/', [Front\ProductController::class, 'show']);
+        Route::get('/related', [Front\ProductController::class, 'relatedProducts']); // Show all related
 
-    /* REVIEW */
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::put('{id_slug}/reviews/{review_id}', [Front\ProductController::class, 'likeReview']);
-        Route::post('{id_slug}/review', [Front\ProductController::class, 'storeReview']);
-        // Route::put('/review', [Front\ProductController::class, 'updateReview']);
-        // Route::delete('/review', [Front\ProductController::class, 'destroyReview']);
+        /* REVIEW */
+        Route::get('/reviews', [Front\ProductController::class, 'productReviews']); // Show all reviews
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::put('/reviews/{review_id}', [Front\ProductController::class, 'likeReview']);
+            Route::post('/review', [Front\ProductController::class, 'storeReview']);
+        });
     });
 });
 

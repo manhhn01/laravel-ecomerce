@@ -16,6 +16,8 @@ class Review extends Model
         'comment', 'rating', 'user_id'
     ];
 
+    protected $appends = ['liked'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -23,6 +25,12 @@ class Review extends Model
 
     public function likes()
     {
-        return $this->belongsToMany(User::class, 'user_review_like', 'user_id', 'review_id');
+        return $this->belongsToMany(User::class, 'user_review_like', 'review_id', 'user_id')->withTimestamps();
+    }
+
+    public function getLikedAttribute()
+    {
+        if (auth('sanctum')->check())
+            return $this->likes->contains(auth('sanctum')->user());
     }
 }

@@ -6,6 +6,8 @@ use App\Repositories\CartProducts\CartProductRepository;
 use App\Repositories\CartProducts\CartProductRepositoryInterface;
 use App\Repositories\Categories\CategoryRepository;
 use App\Repositories\Categories\CategoryRepositoryInterface;
+use App\Repositories\Options\OptionRepository;
+use App\Repositories\Options\OptionRepositoryInterface;
 use App\Repositories\Orders\OrderRepository;
 use App\Repositories\Orders\OrderRepositoryInterface;
 use App\Repositories\Products\ProductRepository;
@@ -25,6 +27,7 @@ class RepositoryProvider extends ServiceProvider
         ResetPasswordRepositoryInterface::class => ResetPasswordRepository::class,
         ProductVariantsRepositoryInterface::class => ProductVariantsRepository::class,
         CartProductRepositoryInterface::class => CartProductRepository::class,
+        OptionRepositoryInterface::class => OptionRepository::class,
     ];
 
     /**
