@@ -8,6 +8,7 @@ use App\Http\Requests\Front\CartProductUpdateRequest;
 use App\Http\Requests\Front\CartProductStoreRequest;
 use App\Http\Requests\Front\CartProductUpdateOneRequest;
 use App\Http\Resources\Front\CartProductResource;
+use App\Models\User;
 use App\Repositories\CartProducts\CartProductRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,7 @@ class CartProductController extends Controller
     {
         $user = $request->user();
 
-        $user->cartProducts()->attach(
+        $user->cartProducts()->syncWithoutDetaching(
             $request->product_variant_id,
             ['quantity' => $request->quantity ?? 1]
         );
