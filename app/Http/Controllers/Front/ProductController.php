@@ -9,12 +9,12 @@ use App\Http\Resources\Front\ProductIndexResource;
 use App\Http\Resources\Front\ProductShowResource;
 use App\Http\Resources\Front\ReviewResource;
 use App\Models\Product;
+use App\Models\User;
 use App\Repositories\Products\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class ProductController extends Controller
 {
@@ -98,12 +98,15 @@ class ProductController extends Controller
         $user = $request->user();
         $product = $this->productRepo->findByIdOrSlug($id_slug);
 
-        if ($product->reviews()->where('user_id', $user->id)->exists()) {
-            throw new UnprocessableEntityHttpException('You\'ve reviewed this product before.');
+        if (!$this->productRepo->haveBought($product, $user)) {
+            throw ValidationException::withMessages(['review.bought' => 'You haven\'t bought this product.']);
+        }
+
+        if ($this->productRepo->haveReviewed($product, $user)) {
+            throw ValidationException::withMessages(['review.reviewed' => 'You\'ve reviewed this product before.']);
         }
 
         $attributes = $request->only(['comment', 'rating']);
-
         $attributes = array_merge($attributes, ['user_id' => $user->id]);
         $review = $product->reviews()->create($attributes);
 
