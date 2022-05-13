@@ -28,6 +28,7 @@ class ProductController extends Controller
     {
         return new ProductPaginationCollection(
             Product::with('variants')
+                ->status(1)
                 ->orderByDesc('created_at')
                 ->paginate($request->query('perpage', 30))
         );
