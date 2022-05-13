@@ -25,6 +25,7 @@ class CartProductResource extends JsonResource
             'size' => $this->size,
             'price' => $this->product->price,
             'sale_price' => $this->product->sale_price,
+            'cover' => $this->product->cover,
         ];
     }
 }
