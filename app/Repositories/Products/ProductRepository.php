@@ -106,4 +106,18 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             return $q->whereIn('name', $product->tags->pluck('name'));
         })->limit($limit)->get();
     }
+
+    public function haveBought($product, $user)
+    {
+        return $product
+            ->variants()
+            ->whereHas('orders', function ($q) use ($user) {
+                return $q->where('user_id', $user->id);
+            })->exists();
+    }
+
+    public function haveReviewed($product, $user)
+    {
+        return $product->reviews()->where('user_id', $user->id)->exists();
+    }
 }

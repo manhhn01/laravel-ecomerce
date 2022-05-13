@@ -5,8 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front;
 use App\Http\Controllers\Front\Auth\ResetPasswordController;
+use App\Http\Controllers\Front\OAuthController;
 use App\Http\Controllers\ProductController;
-use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +19,8 @@ Route::post('/login', [Front\Auth\LoginController::class, 'login']);
 Route::middleware('throttle:email')->post('/forgot', [ResetPasswordController::class, 'sendResetMail']);
 Route::middleware('throttle:verify_code')->post('/reset_password/verify', [ResetPasswordController::class, 'verifyCode']);
 Route::middleware('throttle:verify_code')->put('/reset_password', [ResetPasswordController::class, 'resetPassword']);
-
+Route::get('/auth/{provider}/redirect', [OAuthController::class, 'redirect']);
+Route::get('/auth/{provider}/cb', [OAuthController::class, 'handleCallback']);
 /* HOME PAGE */
 Route::get('/banners', [Front\HomeController::class, 'banners']);
 Route::get('/home_nav', [Front\HomeController::class, 'nav']);
@@ -67,6 +68,11 @@ Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
         Route::delete('/{id}', [Front\CartProductController::class, 'destroy']);
     });
 
+    /* CHECKOUT */
+    Route::prefix('/checkout')->group(function () {
+        Route::post('/', [Front\OrderController::class, 'store']);
+    });
+
     /* WISHLIST */
     Route::prefix('/wishlist')->group(function () {
         Route::get('/', [Front\WishlistProductController::class, 'index']);
@@ -83,6 +89,12 @@ Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
         Route::delete('/{id}', [Front\AddressController::class, 'destroy'])->whereNumber('id');
         Route::get('/child_divisions', [Front\AddressController::class, 'childDivisionsList']);
     });
+});
+
+/* PAYMENT */
+Route::prefix('/payment/')->group(function () {
+    Route::get('/momo/redirect', [Front\OrderController::class, 'momoRedirect'])->name('momo.redirect');
+    Route::post('/momo/notify', [Front\OrderController::class, 'momoIpn'])->name('momo.ipn');
 });
 
 /*

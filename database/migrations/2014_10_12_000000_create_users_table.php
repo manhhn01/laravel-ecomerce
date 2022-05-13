@@ -20,12 +20,15 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('first_name');
             $table->string('last_name');
-            $table->boolean('gender');
+            $table->boolean('gender')->nullable();
             $table->date('dob')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->char('phone', 25)->nullable();
             $table->string('avatar')->nullable();
             $table->smallInteger('role_id')->default(1);
+            $table->unsignedBigInteger('google_id')->nullable();
+            $table->string("google_token")->nullable();
+            $table->string("google_refresh_token")->nullable();
             $table->rememberToken();
 
             $table->timestamps();

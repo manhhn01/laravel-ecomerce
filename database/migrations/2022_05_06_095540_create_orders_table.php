@@ -18,8 +18,10 @@ class CreateOrdersTable extends Migration
 
             $table->foreignId('user_id')->constrained();
             $table->foreignId('address_id')->constrained();
-            $table->foreignId('coupon_id')->constrained();
-            $table->tinyInteger('status');
+            $table->foreignId('coupon_id')->nullable()->constrained();
+            $table->tinyInteger('status')->default(0);
+            $table->string('payment_method');
+            $table->unsignedBigInteger('request_id')->nullable();
             $table->date('shipped_date')->nullable();
 
             $table->timestamps();

@@ -15,7 +15,8 @@ use Illuminate\Http\Request;
 class CartProductController extends Controller
 {
     protected $cartProductRepo;
-    public function __construct(CartProductRepositoryInterface $cartProductRepo){
+    public function __construct(CartProductRepositoryInterface $cartProductRepo)
+    {
         $this->cartProductRepo = $cartProductRepo;
     }
 
@@ -30,10 +31,9 @@ class CartProductController extends Controller
     {
         $user = $request->user();
 
-        $user->cartProducts()->syncWithoutDetaching(
-            $request->product_variant_id,
-            ['quantity' => $request->quantity ?? 1]
-        );
+        $user->cartProducts()->syncWithoutDetaching([
+            $request->product_variant_id => ['quantity' => $request->quantity ?? 1]
+        ]);
 
         return CartProductResource::collection($this->cartProductRepo->getUserCart($user));
     }

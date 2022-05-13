@@ -86,6 +86,14 @@ class User extends Authenticatable
         return $this->hasMany(Review::class);
     }
 
+    public function orders(){
+        return $this->hasMany(Order::class);
+    }
+
+    public function providers(){
+        return $this->hasMany(OAuthProvider::class);
+    }
+
     public function getAvatarAttribute($value)
     {
         return asset("storage/$value");
@@ -103,16 +111,6 @@ class User extends Authenticatable
     {
         return $this->first_name . ' ' . $this->last_name;
     }
-
-    // public function getGenderAttribute($value)
-    // {
-    //     return $value ? 'Nam' : 'Nữ';
-    // }
-
-    // public function setGenderAttribute($value)
-    // {
-    //     $this->attributes['gender'] = $value == 'Nam';
-    // }
 
     public function isAdmin()
     {
