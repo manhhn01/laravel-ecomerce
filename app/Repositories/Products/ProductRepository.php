@@ -90,9 +90,14 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         parent::delete($id);
     }
 
-    public function getImages($id)
+    /* ------ */
+
+    public function page($perPage, $search = null, $status = null)
     {
-        return $this->find($id)->images;
+        // Product::with('variants')
+        //     ->status(1)
+        //     ->orderBy('created_at', 'desc')
+        //     ->paginate(request()->query('perpage', 30));
     }
 
     public function findByIdOrSku($id_sku)

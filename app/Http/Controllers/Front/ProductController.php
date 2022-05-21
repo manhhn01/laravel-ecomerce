@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Repositories\Products\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -29,8 +30,21 @@ class ProductController extends Controller
         return new ProductPaginationCollection(
             Product::with('variants')
                 ->status(1)
-                ->orderByDesc('created_at')
+                ->orderBy('created_at', 'desc')
                 ->paginate($request->query('perpage', 30))
+        );
+    }
+
+    public function topProducts()
+    {
+        return new ProductPaginationCollection(
+            //todo
+            Cache::remember('top_product', 18000, function () {
+                // return Product::with(['variants'] =>)
+                //     ->withCount('variants.orders')
+                //     ->status(1)
+                //     ->orderBy();
+            })
         );
     }
 

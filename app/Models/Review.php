@@ -30,7 +30,7 @@ class Review extends Model
 
     public function getLikedAttribute()
     {
-        if (auth('sanctum')->check())
+        if (!empty(auth('sanctum')->user()))
             return $this->likes->contains(auth('sanctum')->user());
     }
 }
