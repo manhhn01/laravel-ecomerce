@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\ProductPublic;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class WishlistProductStoreRequest extends FormRequest
 {
@@ -15,7 +16,9 @@ class WishlistProductStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_id' => ['required', 'exists:products,id', 'unique:wishlist_product', new ProductPublic],
+            'product_id' => ['required', 'exists:products,id', Rule::unique('wishlist_product')->where(function ($q) {
+                return $q->where('user_id', auth('sanctum')->user()->id);
+            }), new ProductPublic],
         ];
     }
 }
