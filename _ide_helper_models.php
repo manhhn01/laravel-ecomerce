@@ -16,24 +16,28 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $user_id
- * @property string $state
- * @property string $city
+ * @property int|null $ward_id
  * @property string $address
+ * @property float|null $lat
+ * @property float|null $lon
  * @property string $phone
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Ward|null $subdivision
+ * @property-read \App\Models\Ward|null $ward
  * @method static \Database\Factories\AddressFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Address newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Address newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Address query()
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Address whereCity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereLat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereLon($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Address whereState($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Address whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Address whereWardId($value)
  */
 	class Address extends \Eloquent {}
 }
@@ -131,15 +135,20 @@ namespace App\Models{
  * App\Models\District
  *
  * @property int $id
+ * @property string $name
  * @property int $province_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Province $province
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Ward[] $wards
+ * @property-read int|null $wards_count
  * @method static \Database\Factories\DistrictFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|District newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|District newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|District query()
  * @method static \Illuminate\Database\Eloquent\Builder|District whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|District whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|District whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|District whereProvinceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|District whereUpdatedAt($value)
  */
@@ -173,16 +182,74 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\OAuthProvider
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $provider
+ * @property string $provider_user_id
+ * @property string $access_token
+ * @property string|null $refresh_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\OAuthProviderFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|OAuthProvider newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OAuthProvider newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OAuthProvider query()
+ * @method static \Illuminate\Database\Eloquent\Builder|OAuthProvider whereAccessToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OAuthProvider whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OAuthProvider whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OAuthProvider whereProvider($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OAuthProvider whereProviderUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OAuthProvider whereRefreshToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OAuthProvider whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OAuthProvider whereUserId($value)
+ */
+	class OAuthProvider extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Option
+ *
+ * @property int $id
+ * @property string $name
+ * @property string|null $value
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\OptionFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Option newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Option newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Option query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Option whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Option whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Option whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Option whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Option whereValue($value)
+ */
+	class Option extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Order
  *
  * @property int $id
  * @property int $user_id
  * @property int $address_id
- * @property int $coupon_id
+ * @property int|null $coupon_id
  * @property int $status
+ * @property string $payment_method
+ * @property int|null $request_id
  * @property string|null $shipped_date
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User|null $buyer
+ * @property-read mixed $sub_total_price
+ * @property-read mixed $total_price
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductVariant[] $orderProducts
+ * @property-read int|null $order_products_count
  * @method static \Database\Factories\OrderFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
@@ -191,6 +258,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCouponId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentMethod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Order whereRequestId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereShippedDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
@@ -249,8 +318,8 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property string $price
- * @property string|null $sale_price
+ * @property float $price
+ * @property float|null $sale_price
  * @property string $description
  * @property string $cover
  * @property int $status
@@ -262,7 +331,6 @@ namespace App\Models{
  * @property-read int|null $coupon_count
  * @property-read mixed $options
  * @property-read mixed $rating_avg
- * @property-read mixed $related_products
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
  * @property-read int|null $images_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Review[] $publicReviews
@@ -273,6 +341,8 @@ namespace App\Models{
  * @property-read int|null $tags_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductVariant[] $variants
  * @property-read int|null $variants_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $wishlistUsers
+ * @property-read int|null $wishlist_users_count
  * @method static \Database\Factories\ProductFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Product newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Product newQuery()
@@ -379,10 +449,12 @@ namespace App\Models{
  * @property int $user_id
  * @property int $rating
  * @property string $comment
- * @property int $like
  * @property int $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $liked
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $likes
+ * @property-read int|null $likes_count
  * @property-read \App\Models\User $user
  * @method static \Database\Factories\ReviewFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Review newModelQuery()
@@ -394,7 +466,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereComment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Review whereLike($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereRating($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Review whereStatus($value)
@@ -491,24 +562,35 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $first_name
  * @property string $last_name
- * @property int $gender
+ * @property int|null $gender
  * @property string|null $dob
- * @property string $password
+ * @property string|null $password
  * @property string|null $phone
  * @property string|null $avatar
  * @property int $role_id
+ * @property int|null $google_id
+ * @property string|null $google_token
+ * @property string|null $google_refresh_token
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Address[] $addresses
+ * @property-read int|null $addresses_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductVariant[] $cartProducts
- * @property-read int|null $cart_product_count
+ * @property-read int|null $cart_products_count
  * @property-read mixed $full_name
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Order[] $orders
+ * @property-read int|null $orders_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\OAuthProvider[] $providers
+ * @property-read int|null $providers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Review[] $reviews
+ * @property-read int|null $reviews_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $wishlistProducts
- * @property-read int|null $wishlist_product_count
+ * @property-read int|null $wishlist_products_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -520,6 +602,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereGender($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereGoogleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereGoogleRefreshToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereGoogleToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
@@ -540,6 +625,7 @@ namespace App\Models{
  * @property int $district_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\District $district
  * @method static \Database\Factories\WardFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Ward newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Ward newQuery()

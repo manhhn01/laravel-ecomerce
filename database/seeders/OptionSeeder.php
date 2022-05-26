@@ -28,7 +28,7 @@ class OptionSeeder extends Seeder
             'name' => 'nav_menu',
             'value' => serialize([
                 [
-                    'name' => 'Hàng mới',
+                    'name' => 'Trang chủ',
                     'url' => '/new-products'
                 ],
                 [
@@ -60,5 +60,23 @@ class OptionSeeder extends Seeder
                 ],
             ])
         ])->create();
+
+        Option::factory([
+            'name' => 'home_collection',
+            'value' => serialize([
+                [
+                    'name' => 'Hàng mới',
+                    'url' => '/api/products'
+                ],
+                [
+                    'name' => 'Bán chạy',
+                    'url' => '/api/products/top'
+                ],
+                [
+                    'name' => '',
+                    'url' => '/api/categories/2'
+                ]
+            ])
+        ]);
     }
 }

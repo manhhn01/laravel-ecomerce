@@ -29,7 +29,7 @@ class OptionRepository extends BaseRepository implements OptionRepositoryInterfa
 
     public function getHomeCollection()
     {
-        return [];
+        return $this->getOptionValue('home_collections');
     }
 
     public function getTrendingKeywords()
@@ -39,6 +39,16 @@ class OptionRepository extends BaseRepository implements OptionRepositoryInterfa
 
     protected function getOptionValue($name)
     {
-        return unserialize($this->model->where('name', $name)->first()->value);
+        return unserialize($this->model->where('name', $name)->firstOrFail()->value);
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    protected function setOptionValue($name, $value)
+    {
+        $this->model->create(['name' => $name, 'value' => serialize($value)]);
     }
 }

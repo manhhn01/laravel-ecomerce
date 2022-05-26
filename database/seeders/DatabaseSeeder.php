@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
     {
         foreach ($products as $productData) {
             $tags = Tag::query();
-            foreach ($productData['tags'] as $productTag){
+            foreach ($productData['tags'] as $productTag) {
                 $tags->orWhere('name', $productTag);
             }
             $tags = $tags->get();
@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
             $product = Product::factory([
                 'name' => $productData['name'],
                 'slug' => $productData['slug'],
-                'cover' => 'images/products/'.basename(parse_url($productData['cover'], PHP_URL_PATH)),
+                'cover' => 'images/products/' . basename(parse_url($productData['cover'], PHP_URL_PATH)),
                 'description' => $productData['description'],
                 'price' => $productData['price'],
                 'sale_price' => $productData['sale_price']
@@ -90,23 +90,26 @@ class DatabaseSeeder extends Seeder
                 ->create();
 
             foreach ($productData['variants'] as $productVariant) {
-                $color = $this->colors->firstWhere('name', $productVariant['color']);
-                $size = $this->sizes->firstWhere('name', $productVariant['size']) ?? Size::where('name', 'Free size')->first();
+                if (isset($productVariant['cover'])) {
 
-                ProductVariant::factory([
-                    'id' => $productVariant['id'],
-                    'sku' => $productVariant['sku'],
-                    'quantity' => $productVariant['quantity'],
-                    'cover' => isset($productVariant['cover']) ? 'images/products/'.basename(parse_url($productVariant['cover'], PHP_URL_PATH)) : 'images/products/'.rand(0, 100).'.jpeg',
-                ])
-                    ->for($product)
-                    ->for($color)
-                    ->for($size)
-                    ->create();
+                    $color = $this->colors->firstWhere('name', $productVariant['color']);
+                    $size = $this->sizes->firstWhere('name', $productVariant['size']) ?? Size::where('name', 'Free size')->first();
+
+                    ProductVariant::factory([
+                        'id' => $productVariant['id'],
+                        'sku' => $productVariant['sku'],
+                        'quantity' => $productVariant['quantity'],
+                        'cover' => 'images/products/' . basename(parse_url($productVariant['cover'], PHP_URL_PATH)),
+                    ])
+                        ->for($product)
+                        ->for($color)
+                        ->for($size)
+                        ->create();
+                }
             }
 
             foreach ($productData['images'] as $productImage) {
-                Image::factory(['image' => 'images/products/'.basename(parse_url($productImage, PHP_URL_PATH))])->for($product, 'imageable')->create();
+                Image::factory(['image' => 'images/products/' . basename(parse_url($productImage, PHP_URL_PATH))])->for($product, 'imageable')->create();
             }
         }
     }

@@ -47,8 +47,13 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         $categoryIds = $category->children->pluck('id')->merge([$category->id]);
         $products =  Product::status(1)
             ->with('variants')
-            ->whereIn('category_id', $categoryIds)
-            ->orderBy($sortBy, $order);
+            ->whereIn('category_id', $categoryIds);
+
+        if ($sortBy == 'price') {
+            $products->orderByRaw('COALESCE(sale_price, price) ' . (strtolower($order) == 'asc' ? 'ASC' : 'desc'));
+        } else {
+            $products->orderBy($sortBy, $order);
+        }
 
         if (!empty($filters)) {
             $products = $this->productsFilter($products, $filters);
@@ -74,7 +79,6 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
                                 ->where('price', '>', $filters['price_min']);
                         });
                 });
-        // dd($productsQuery->get());
 
         if (isset($filters['price_max']))
             $productsQuery

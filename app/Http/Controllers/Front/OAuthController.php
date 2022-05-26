@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\OAuthRequest;
+use App\Http\Resources\Front\UserResource;
 use App\Repositories\OAuthProvider\OAuthProviderRepositoryInterface;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
@@ -27,12 +28,12 @@ class OAuthController extends Controller
     public function handleCallback(OAuthRequest $request, string $provider)
     {
         $providerUser =  Socialite::driver($provider)->stateless()->user();
-        // dd($googleUser);
         $user = $this->oAuthRepo->findOrCreateUser($provider, $providerUser);
-
-        //todo return view postmessage
-        return response()->json([
-            'token' => $user->createToken($request->userAgent())->plainTextToken,
-        ]);
+        $user->setAppends(['rawAvatar']);
+        auth()->login($user);
+        return view('auth.oauth', ['user' => (new UserResource($user))->toJson()]);
+        // return response()->json([
+        //     'token' => $user->createToken($request->userAgent())->plainTextToken,
+        // ]);
     }
 }

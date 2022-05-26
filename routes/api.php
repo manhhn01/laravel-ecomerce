@@ -16,6 +16,7 @@ use App\Http\Controllers\ProductController;
 
 Route::post('/register', [Front\Auth\RegisterController::class, 'register']);
 Route::post('/login', [Front\Auth\LoginController::class, 'login']);
+Route::post('/logout', [Front\Auth\LoginController::class, 'logout']);
 Route::middleware('throttle:email')->post('/forgot', [ResetPasswordController::class, 'sendResetMail']);
 Route::middleware('throttle:verify_code')->post('/reset_password/verify', [ResetPasswordController::class, 'verifyCode']);
 Route::middleware('throttle:verify_code')->put('/reset_password', [ResetPasswordController::class, 'resetPassword']);
@@ -32,6 +33,7 @@ Route::get('/trending_search', [Front\HomeController::class, 'trending']);
 Route::prefix('/products')->group(function () {
     Route::get('/', [Front\ProductController::class, 'index']);
     Route::get('/search', [Front\ProductController::class, 'search']);
+    Route::get('/top', [Front\ProductController::class, 'topProducts']);
     Route::prefix('/{id_slug}')->group(function () {
         Route::get('/', [Front\ProductController::class, 'show']);
         Route::get('/related', [Front\ProductController::class, 'relatedProducts']); // Show all related

@@ -99,6 +99,12 @@ class Product extends Model
         ];
     }
 
+    public function getSoldAttributes(){
+        $variantIds = $this->variants->pluck('id')->toArray();
+        return \DB::table('order_product_variant')->sum('quantity');
+        //todo
+    }
+
     public function toSearchableArray()
     {
         return [

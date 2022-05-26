@@ -6,6 +6,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
 {
+    protected $type;
+
+    public function __construct($resource, $type = null)
+    {
+        parent::__construct($resource);
+        $this->type = $type;
+    }
     /**
      * Transform the resource into an array.
      *
@@ -15,13 +22,13 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'=>$this->id,
+            'id' => $this->id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'full_name' => $this->whenAppended('full_name'),
             'email' => $this->email,
             'gender' => $this->gender,
-            'avatar' => $this->avatar,
+            'avatar' => $this->when($this->type === 'provider', $this->provider_avatar, $this->avatar),
             'phone' => $this->phone,
             'dob' => $this->dob,
             'joined_at' => $this->created_at,

@@ -21,6 +21,7 @@ class CreateOrdersTable extends Migration
             $table->foreignId('coupon_id')->nullable()->constrained();
             $table->tinyInteger('status')->default(0);
             $table->string('payment_method');
+            $table->string('payment_signature')->nullable();
             $table->unsignedBigInteger('request_id')->nullable();
             $table->date('shipped_date')->nullable();
 

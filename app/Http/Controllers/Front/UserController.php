@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\UserUpdateRequest;
 use App\Http\Requests\ImageUploadRequest;
+use App\Http\Resources\Front\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,14 +16,12 @@ class UserController extends Controller
 {
     public function show(Request $request)
     {
-        return $request->user();
+        $user = $request->user();
+        return new UserResource($user);
     }
 
     public function update(UserUpdateRequest $request)
     {
-        /**
-         * @var User
-         */
         $user = $request->user();
 
         $attributes = $request->only([
@@ -35,7 +34,7 @@ class UserController extends Controller
             ]);
 
         $user->update($attributes);
-        return $user;
+        return new UserResource($user);
     }
 
     public function uploadAvatar(ImageUploadRequest $request)

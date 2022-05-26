@@ -33,24 +33,24 @@ class OAuthProviderRepository extends BaseRepository implements OAuthProviderRep
             throw ValidationException::withMessages([
                 'email' => 'This email has been taken'
             ]);
+        } else {
+            $user = User::create([
+                'email' => $providerUser->getEmail(),
+                'first_name' => $this->getFirstName($providerName, $providerUser->user),
+                'last_name' => $this->getLastName($providerName, $providerUser->user),
+                'provider_avatar' => $providerUser->getAvatar(),
+                'email_verified_at' => now()
+            ]);
+
+            $user->providers()->create([
+                'provider' => $providerName,
+                'provider_user_id' => $providerUser->getId(),
+                'access_token' => $providerUser->token,
+                'refresh_token' => $providerUser->refreshToken,
+            ]);
+
+            return $user;
         }
-
-        $user = User::create([
-            'email' => $providerUser->getEmail(),
-            'first_name' => $this->getFirstName($providerName, $providerUser->user),
-            'last_name' => $this->getLastName($providerName, $providerUser->user),
-            'avatar' => $providerUser->getAvatar(), // todo store avatar ?
-            'email_verified_at' => now()
-        ]);
-
-        $user->providers()->create([
-            'provider' => $providerName,
-            'provider_user_id' => $providerUser->getId(),
-            'access_token' => $providerUser->token,
-            'refresh_token' => $providerUser->refreshToken,
-        ]);
-
-        return $user;
     }
 
     /**

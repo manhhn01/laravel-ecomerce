@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->char('phone', 25)->nullable();
             $table->string('avatar')->nullable();
+            $table->string('provider_avatar')->nullable();
             $table->smallInteger('role_id')->default(1);
             $table->unsignedBigInteger('google_id')->nullable();
             $table->string("google_token")->nullable();

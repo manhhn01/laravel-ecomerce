@@ -40,7 +40,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'email_verified_at',
-        'role_id'
+        'role_id',
     ];
 
     /**
@@ -86,11 +86,13 @@ class User extends Authenticatable
         return $this->hasMany(Review::class);
     }
 
-    public function orders(){
+    public function orders()
+    {
         return $this->hasMany(Order::class);
     }
 
-    public function providers(){
+    public function providers()
+    {
         return $this->hasMany(OAuthProvider::class);
     }
 
@@ -99,9 +101,14 @@ class User extends Authenticatable
         return asset("storage/$value");
     }
 
+    public function getRawAvatarAttribute(){
+        return $this->getRawOriginal('avatar');
+    }
+
     public function getEmailAttribute($value)
     {
-        if (auth('sanctum')->check()) {
+        $user = auth('sanctum')->user();
+        if (!empty($user) && $user->id === $this->id) {
             return $value;
         }
         return preg_replace("/(?!^).(?=[^@]+@)/", "*", $value);
