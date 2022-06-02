@@ -13,7 +13,7 @@ class Product extends Model
     protected $fillable = ['name', 'slug', 'description', 'status'];
     protected $hidden = ['category_id'];
     protected $with = ['reviews'];
-    protected $appends = ['rating_avg', 'options'];
+    protected $appends = ['rating_avg', 'options', 'wished'];
     protected $casts = [
         'price' => 'float',
         'sale_price' => 'float'
@@ -99,7 +99,8 @@ class Product extends Model
         ];
     }
 
-    public function getSoldAttributes(){
+    public function getSoldAttributes()
+    {
         $variantIds = $this->variants->pluck('id')->toArray();
         return \DB::table('order_product_variant')->sum('quantity');
         //todo
@@ -116,5 +117,11 @@ class Product extends Model
     public function isPublic()
     {
         return $this->status == 1;
+    }
+
+    public function getWishedAttribute()
+    {
+        if (!empty(auth('sanctum')->user()))
+            return $this->wishlistUsers->contains(auth('sanctum')->user());
     }
 }

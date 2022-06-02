@@ -22,10 +22,16 @@ class OAuthProviderRepository extends BaseRepository implements OAuthProviderRep
             ->where('provider_user_id', $providerUser->getId())->first();
 
         if (!empty($provider)) {
+            $user = $provider->user;
+
             $provider->update([
                 'access_token' => $providerUser->token,
                 'refresh_token' => $providerUser->refreshToken,
             ]);
+            $user->update([
+                'provider_avatar' => $providerUser->getAvatar(),
+            ]);
+
             return $provider->user;
         }
 

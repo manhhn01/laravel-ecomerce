@@ -29,11 +29,8 @@ class OAuthController extends Controller
     {
         $providerUser =  Socialite::driver($provider)->stateless()->user();
         $user = $this->oAuthRepo->findOrCreateUser($provider, $providerUser);
-        $user->setAppends(['rawAvatar']);
         auth()->login($user);
-        return view('auth.oauth', ['user' => (new UserResource($user))->toJson()]);
-        // return response()->json([
-        //     'token' => $user->createToken($request->userAgent())->plainTextToken,
-        // ]);
+        $request->session()->put('login_type', 'provider');
+        return view('auth.oauth', ['user' => (new UserResource($user, 'provider'))->toJson()]);
     }
 }

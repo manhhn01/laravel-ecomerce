@@ -3,8 +3,11 @@
 <head>
     <title>{{config('app.name')}}</title>
     <script>
-        window.opener.postMessage({!! $user !!}, 'http://localhost:3000');
+        window.opener.postMessage({
+            status: 'success'
+        }, 'http://localhost:3000');
         window.close();
+
     </script>
 </head>
 <body>

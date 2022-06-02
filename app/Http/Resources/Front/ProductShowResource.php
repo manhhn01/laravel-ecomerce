@@ -21,6 +21,7 @@ class ProductShowResource extends JsonResource
             'price' => $this->price,
             'sale_price' => $this->sale_price,
             'description' => $this->description,
+            'wished' => $this->wished,
             'cover' => $this->cover,
             'rating_avg' => $this->whenAppended('rating_avg'),
             'wishes_count' => $this->whenLoaded('wishlistUsers', $this->wishlistUsers->count()),

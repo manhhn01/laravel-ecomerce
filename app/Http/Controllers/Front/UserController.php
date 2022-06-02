@@ -17,7 +17,7 @@ class UserController extends Controller
     public function show(Request $request)
     {
         $user = $request->user();
-        return new UserResource($user);
+        return new UserResource($user, $request->session()->get('login_type'));
     }
 
     public function update(UserUpdateRequest $request)
