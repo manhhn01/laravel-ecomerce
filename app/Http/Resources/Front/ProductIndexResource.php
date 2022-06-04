@@ -23,6 +23,7 @@ class ProductIndexResource extends JsonResource
             'cover' => $this->cover,
             'status' => $this->status,
             'created_at' => $this->created_at,
+            'wished' => $this->wished,
             'rating_avg' => $this->whenAppended('rating_avg'),
             'options' => $this->whenAppended('options'),
             'variants' => $this->whenLoaded('variants'),
