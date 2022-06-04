@@ -3,10 +3,7 @@
 namespace App\Repositories\Categories;
 
 use App\Models\Category;
-use App\Models\Color;
 use App\Models\Product;
-use App\Models\Size;
-use App\Models\Tag;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Cache;
 
@@ -59,7 +56,10 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             $products = $this->productsFilter($products, $filters);
         }
 
-        return $category->setAttribute('products', $products->paginate($perPage));
+        return tap($category, function ($cat) use($products, $perPage) {
+            $cat->setAttribute('products', $products->paginate($perPage));
+            $cat->setAttribute('products_count', $products->count());
+        });
     }
 
     public function productsFilter($productsQuery, $filters)

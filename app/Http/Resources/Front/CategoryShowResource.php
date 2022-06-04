@@ -22,7 +22,9 @@ class CategoryShowResource extends JsonResource
             'description' => $this->description,
             'cover' => $this->cover,
             'products' => new ProductPaginationCollection($this->when(isset($this->products), $this->products)),
-            'children' => $this->whenLoaded('children')
+            'children' => $this->whenLoaded('children'),
+            'parent' => $this->parent,
+            'products_count' => $this->products_count
         ];
     }
 }

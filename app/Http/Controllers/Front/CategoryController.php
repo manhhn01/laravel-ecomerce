@@ -37,6 +37,12 @@ class CategoryController extends Controller
     {
         $category = $this->categoryRepo->findByIdOrSlug($id_slug);
         $filterNames = ['color', 'category_id', 'size', 'price_min', 'price_max'];
-        return new CategoryShowResource($this->categoryRepo->allProductsPage($category, $request->only($filterNames), $request->query('perpage', 30), $request->query('sortby', 'created_at'), $request->query('order', 'desc')));
+        return new CategoryShowResource($this->categoryRepo->allProductsPage(
+            $category,
+            $request->only($filterNames),
+            $request->query('perpage', 30),
+            $request->query('sortby', 'created_at'),
+            $request->query('order', 'desc')
+        ));
     }
 }
