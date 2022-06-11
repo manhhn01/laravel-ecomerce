@@ -2,19 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Collections\OrderPaginationCollection;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Repositories\Orders\OrderRepositoryInterface;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    protected $orderRepo;
+    public function __construct(OrderRepositoryInterface $orderRepo)
+    {
+        $this->orderRepo = $orderRepo;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filterNames = [];
+        return new OrderPaginationCollection($this->orderRepo->filterAndPage(
+            $request->only($filterNames),
+            $request->query('perpage', 30),
+            $request->query('sortby', 'created_at'),
+            $request->query('order', 'desc')
+        ));
     }
 
     /**
@@ -22,7 +37,7 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
     }

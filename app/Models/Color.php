@@ -13,7 +13,8 @@ class Color extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    public function variant(){
+    public function variant()
+    {
         return $this->belongsTo(ProductVariant::class);
     }
 }

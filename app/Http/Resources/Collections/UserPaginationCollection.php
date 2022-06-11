@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Front\Collections;
+namespace App\Http\Resources\Collections;
 
-use App\Http\Resources\Front\ProductIndexResource;
+use App\Http\Resources\Front\UserResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Resources\Json\ResourceResponse;
 
-class ProductPaginationCollection extends ResourceCollection
+class UserPaginationCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -17,20 +17,16 @@ class ProductPaginationCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => ProductIndexResource::collection($this->collection),
+            'data' => UserResource::collection($this->collection),
             'current_page' => $this->currentPage(),
             'last_page' => $this->lastPage(),
             'per_page' => intval($this->perPage()),
-            'products_count' => $this->total(),
+            'users_count' => $this->total(),
         ];
     }
 
     public function toResponse($request)
     {
-        // if ($this->resource instanceof AbstractPaginator || $this->resource instanceof AbstractCursorPaginator) {
-        //     return $this->preparePaginatedResponse($request);
-        // }
-        // return parent::toResponse($request);
         return (new ResourceResponse($this))->toResponse($request);
     }
 }

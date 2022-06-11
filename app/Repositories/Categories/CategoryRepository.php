@@ -56,9 +56,9 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             $products = $this->productsFilter($products, $filters);
         }
 
-        return tap($category, function ($cat) use($products, $perPage) {
-            $cat->setAttribute('products', $products->paginate($perPage));
-            $cat->setAttribute('products_count', $products->count());
+        return tap($category, function ($cat) use ($products, $perPage) {
+            $productPage = $products->paginate($perPage);
+            $cat->setAttribute('products', $productPage);
         });
     }
 

@@ -19,18 +19,12 @@ interface ProductRepositoryInterface extends RepositoryInterface
     public function relatedProducts($product, $limit = 20);
 
     /**
-     * Check user have bought product before
-     * @param Product $product
-     * @param User $user
-     * @return bool
+     * @param array $filters
+     * @param int $perPage
+     * @param string $sortBy
+     * @param string $order
+     * @param bool $onlyPublic
+     * @return LengthAwarePaginator
      */
-    public function haveBought($product, $user);
-
-    /**
-     * Check user have review product before
-     * @param Product $product
-     * @param User $user
-     * @return bool
-     */
-    public function haveReviewed($product, $user);
+    public function filterAndPage($filters, $perPage = 30, $sortBy = 'created_at', $order = 'desc', $onlyPublic = true);
 }

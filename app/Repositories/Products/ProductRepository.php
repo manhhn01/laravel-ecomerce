@@ -6,6 +6,7 @@ use App\Exceptions\TableConstraintException;
 use App\Models\Category;
 use App\Models\Product;
 use App\Repositories\BaseRepository;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
@@ -92,12 +93,82 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     /* ------ */
 
-    public function page($perPage, $search = null, $status = null)
+    public function productsFilter($productsQuery, $filters)
     {
-        // Product::with('variants')
-        //     ->status(1)
-        //     ->orderBy('created_at', 'desc')
-        //     ->paginate(request()->query('perpage', 30));
+        if (isset($filters['price_min']))
+            $productsQuery
+                ->whereNested(function ($q) use ($filters) {
+                    $q
+                        ->where(function ($q) use ($filters) {
+                            return $q
+                                ->whereNotNull('sale_price')
+                                ->where('sale_price', '>', $filters['price_min']);
+                        })
+                        ->orWhere(function ($q) use ($filters) {
+                            return $q
+                                ->whereNull('sale_price')
+                                ->where('price', '>', $filters['price_min']);
+                        });
+                });
+
+        if (isset($filters['price_max']))
+            $productsQuery
+                ->whereNested(function ($q) use ($filters) {
+                    $q
+                        ->where(function ($q) use ($filters) {
+                            return $q
+                                ->whereNotNull('sale_price')
+                                ->where('sale_price', '<', $filters['price_max']);
+                        })
+                        ->orWhere(function ($q) use ($filters) {
+                            return $q
+                                ->whereNull('sale_price')
+                                ->where('price', '<', $filters['price_max']);
+                        });
+                });
+
+        if (isset($filters['color'])) {
+            $colorTags = explode(',', $filters['color']);
+            $productsQuery
+                ->whereHas('tags', function ($q) use ($colorTags) {
+                    return $q->whereIn('tags.name', $colorTags);
+                });
+        }
+
+        if (isset($filters['size'])) {
+            $sizeNames = explode(',', $filters['size']);
+            $productsQuery->whereHas('variants', function ($q) use ($sizeNames) {
+                $q->whereHas('size', function ($q) use ($sizeNames) {
+                    $q->whereIn('sizes.name', $sizeNames);
+                });
+            });
+        }
+
+        if (isset($filters['category_id'])) {
+            $productsQuery = $productsQuery->where('category_id', $filters['category_id']);
+        }
+
+        return $productsQuery;
+    }
+
+    public function filterAndPage($filters, $perPage = 30, $sortBy = 'created_at', $order = 'desc', $onlyPublic = true)
+    {
+        if ($onlyPublic)
+            $products = Product::public()
+                ->with('variants');
+        else $products = Product::with('variants');
+
+        if ($sortBy == 'price') {
+            $products->orderByRaw('COALESCE(sale_price, price) ' . (strtolower($order) == 'asc' ? 'ASC' : 'desc'));
+        } else {
+            $products->orderBy($sortBy, $order);
+        }
+
+        if (!empty($filters)) {
+            $products = $this->productsFilter($products, $filters);
+        }
+
+        return $products->paginate($perPage);
     }
 
     public function findByIdOrSku($id_sku)
@@ -110,19 +181,5 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return $this->model->with(['variants', 'tags'])->whereHas('tags', function ($q) use ($product) {
             return $q->whereIn('name', $product->tags->pluck('name'));
         })->limit($limit)->get();
-    }
-
-    public function haveBought($product, $user)
-    {
-        return $product
-            ->variants()
-            ->whereHas('orders', function ($q) use ($user) {
-                return $q->where('user_id', $user->id);
-            })->exists();
-    }
-
-    public function haveReviewed($product, $user)
-    {
-        return $product->reviews()->where('user_id', $user->id)->exists();
     }
 }

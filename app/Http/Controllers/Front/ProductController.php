@@ -9,7 +9,6 @@ use App\Http\Resources\Front\ProductIndexResource;
 use App\Http\Resources\Front\ProductShowResource;
 use App\Http\Resources\Front\ReviewResource;
 use App\Models\Product;
-use App\Models\User;
 use App\Repositories\Products\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -27,12 +26,19 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
+        $filterNames = ['color', 'category_id', 'size', 'price_min', 'price_max'];
         return new ProductPaginationCollection(
-            Product::with('variants')
-                ->status(1)
-                ->orderBy('created_at', 'desc')
-                ->paginate($request->query('perpage', 30))
+            $this->productRepo->filterAndPage(
+                $request->only($filterNames),
+                $request->query('perpage', 30),
+                $request->query('sortby', 'created_at'),
+                $request->query('order', 'desc')
+            )
         );
+        // Product::with('variants')
+        //     ->status(1)
+        //     ->orderBy('created_at', 'desc')
+        //     ->paginate($request->query('perpage', 30))
     }
 
     public function topProducts()
@@ -54,7 +60,7 @@ class ProductController extends Controller
             $products = Product::search($query)
                 ->where('status', 1)
                 ->orderBy('created_at', 'desc')
-                ->paginate(30)
+                ->paginate($request->query('perpage', 30))
                 ->tap(function ($products) {
                     $products
                         ->makeHidden(['reviews', 'publicReviews'])
@@ -113,11 +119,11 @@ class ProductController extends Controller
         $user = $request->user();
         $product = $this->productRepo->findByIdOrSlug($id_slug);
 
-        if (!$this->productRepo->haveBought($product, $user)) {
+        if (!$user->hasBought($product)) {
             throw ValidationException::withMessages(['review.bought' => 'You haven\'t bought this product.']);
         }
 
-        if ($this->productRepo->haveReviewed($product, $user)) {
+        if ($user->hasReviewed($product)) {
             throw ValidationException::withMessages(['review.reviewed' => 'You\'ve reviewed this product before.']);
         }
 

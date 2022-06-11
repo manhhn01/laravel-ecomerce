@@ -11,14 +11,17 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'address_id',
         'coupon_id',
         'payment_method',
+        'payment_signature',
+        'request_id',
     ];
 
     public function buyer()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function orderProducts()

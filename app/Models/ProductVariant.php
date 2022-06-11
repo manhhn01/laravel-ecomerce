@@ -26,7 +26,14 @@ class ProductVariant extends Model
         'updated_at'
     ];
 
-    public function product(){
+    protected $casts = [
+        'quantity' => 'integer',
+        'color_id'=> 'integer',
+        'size_id'=>'integer'
+    ];
+
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
 

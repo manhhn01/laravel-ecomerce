@@ -24,7 +24,6 @@ class CategoryShowResource extends JsonResource
             'products' => new ProductPaginationCollection($this->when(isset($this->products), $this->products)),
             'children' => $this->whenLoaded('children'),
             'parent' => $this->parent,
-            'products_count' => $this->products_count
         ];
     }
 }

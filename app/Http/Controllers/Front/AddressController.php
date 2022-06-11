@@ -27,7 +27,7 @@ class AddressController extends Controller
     {
         $user = $request->user();
 
-        $user->addresses()->create($request->only(['phone', 'lat', 'lon', 'ward_id', 'address']));
+        $user->addresses()->create($request->only(['phone', 'lat', 'lon', 'ward_id', 'address', 'first_name', 'last_name']));
 
         return AddressResource::collection($user->addresses->load('ward.district.province'));
     }
@@ -39,7 +39,7 @@ class AddressController extends Controller
         $user
             ->addresses()
             ->findOrFail($id)
-            ->update($request->only(['address', 'phone', 'ward_id', 'lat', 'lon']));
+            ->update($request->only(['address','first_name', 'last_name', 'phone', 'ward_id', 'lat', 'lon']));
 
         return AddressResource::collection($user->addresses->load('ward.district.province'));
     }

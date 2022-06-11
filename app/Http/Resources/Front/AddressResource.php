@@ -21,6 +21,8 @@ class AddressResource extends JsonResource
                 'lat' => $this->lat,
                 'lon' => $this->lon
             ],
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
             'phone' => $this->phone,
             'ward' => $this->ward,
             'district' => optional($this->ward)->district,

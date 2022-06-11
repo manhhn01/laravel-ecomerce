@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Front\Collections\ProductPaginationCollection;
 use App\Models\Product;
 use App\Repositories\Brands\BrandRepositoryInterface;
 use App\Repositories\Categories\CategoryRepositoryInterface;
@@ -28,11 +29,14 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = $this->productRepo->page(100, $request->query('search'), $request->query('status'));
-
-        return view(
-            'admin.product.index',
-            ['products' => $products]
+        $filterNames = ['color', 'category_id', 'size', 'price_min', 'price_max'];
+        return new ProductPaginationCollection(
+            $this->productRepo->filterAndPage(
+                $request->only($filterNames),
+                $request->query('perpage', 30),
+                $request->query('sortby', 'created_at'),
+                $request->query('order', 'desc')
+            )
         );
     }
 

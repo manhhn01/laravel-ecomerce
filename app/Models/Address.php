@@ -12,6 +12,8 @@ class Address extends Model
     protected $fillable = [
         'user_id',
         'ward_id',
+        'first_name',
+        'last_name',
         'address',
         'phone',
         'lat',

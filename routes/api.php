@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front;
 use App\Http\Controllers\Front\Auth\ResetPasswordController;
 use App\Http\Controllers\Front\OAuthController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +22,10 @@ Route::post('/logout', [Front\Auth\LoginController::class, 'logout']);
 Route::middleware('throttle:email')->post('/forgot', [ResetPasswordController::class, 'sendResetMail']);
 Route::middleware('throttle:verify_code')->post('/reset_password/verify', [ResetPasswordController::class, 'verifyCode']);
 Route::middleware('throttle:verify_code')->put('/reset_password', [ResetPasswordController::class, 'resetPassword']);
-Route::get('/auth/{provider}/redirect', [OAuthController::class, 'redirect']);
-Route::get('/auth/{provider}/cb', [OAuthController::class, 'handleCallback']);
+Route::middleware('web')->group(function () {
+    Route::get('/auth/{provider}/redirect', [OAuthController::class, 'redirect']);
+    Route::get('/auth/{provider}/cb', [OAuthController::class, 'handleCallback']);
+});
 /* HOME PAGE */
 Route::get('/banners', [Front\HomeController::class, 'banners']);
 Route::get('/home_nav', [Front\HomeController::class, 'nav']);
@@ -70,11 +74,6 @@ Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
         Route::delete('/{id}', [Front\CartProductController::class, 'destroy']);
     });
 
-    /* CHECKOUT */
-    Route::prefix('/checkout')->group(function () {
-        Route::post('/', [Front\OrderController::class, 'store']);
-    });
-
     /* WISHLIST */
     Route::prefix('/wishlist')->group(function () {
         Route::get('/', [Front\WishlistProductController::class, 'index']);
@@ -89,15 +88,23 @@ Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
         Route::post('/', [Front\AddressController::class, 'store']);
         Route::put('/{id}', [Front\AddressController::class, 'update'])->whereNumber('id');
         Route::delete('/{id}', [Front\AddressController::class, 'destroy'])->whereNumber('id');
+        //todo remove below
         Route::get('/child_divisions', [Front\AddressController::class, 'childDivisionsList']);
     });
 });
 
 /* PAYMENT */
+// Route::middleware('throttle:checkout')->prefix('/checkout')->group(function () {
+Route::prefix('/checkout')->group(function () {
+    Route::post('/', [Front\OrderController::class, 'store']);
+});
 Route::prefix('/payment/')->group(function () {
     Route::get('/momo/redirect', [Front\OrderController::class, 'momoRedirect'])->name('momo.redirect');
     Route::post('/momo/notify', [Front\OrderController::class, 'momoIpn'])->name('momo.ipn');
 });
+
+/* ADDRESSES */
+Route::get('/addresses/child_divisions', [Front\AddressController::class, 'childDivisionsList']);
 
 /*
 |--------------------------------------------------------------------------
@@ -106,9 +113,9 @@ Route::prefix('/payment/')->group(function () {
 */
 
 Route::prefix('admin')->group(function () {
-    Route::get('/login', [LoginController::class, 'login']);
+    Route::post('/login', [LoginController::class, 'login']);
 
-    Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    // Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         /* PRODUCT */
         Route::resource('products', ProductController::class);
         //size
@@ -117,10 +124,12 @@ Route::prefix('admin')->group(function () {
         /* CATEGORY */
 
         /* ORDER */
+        Route::resource('orders', OrderController::class);
 
         /* RECEIVED NOTE */
 
         /* USER */
+        Route::resource('users', UserController::class);
         //role
         //permission
 
@@ -130,5 +139,5 @@ Route::prefix('admin')->group(function () {
         //slide
         //logo
         //...
-    });
+    // });
 });

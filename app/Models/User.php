@@ -51,6 +51,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role_id' => 'integer'
     ];
 
     protected $attributes = [
@@ -60,11 +61,6 @@ class User extends Authenticatable
     public function cartProducts()
     {
         return $this->belongsToMany(ProductVariant::class, 'cart_product')->withPivot('quantity')->withTimestamps();
-    }
-
-    public function cartPublicProducts()
-    {
-        return $this->cartProducts()->status(1);
     }
 
     public function wishlistProducts()
@@ -102,16 +98,18 @@ class User extends Authenticatable
         return asset("storage/$value");
     }
 
-    public function getRawAvatarAttribute(){
+    public function getRawAvatarAttribute()
+    {
         return $this->getRawOriginal('avatar');
     }
 
     public function getEmailAttribute($value)
     {
         $user = auth('sanctum')->user();
-        if (!empty($user) && $user->id === $this->id) {
-            return $value;
-        }
+        if (!empty($user))
+            if ($user->id === $this->id || $user->isAdmin()) {
+                return $value;
+            }
         return preg_replace("/(?!^).(?=[^@]+@)/", "*", $value);
     }
 
@@ -123,5 +121,19 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->role_id == 0;
+    }
+
+    public function hasBought($product)
+    {
+        return $product
+            ->variants()
+            ->whereHas('orders', function ($q) {
+                return $q->where('user_id', $this->id);
+            })->exists();
+    }
+
+    public function hasReviewed($product)
+    {
+        return $product->reviews()->where('user_id', $this->id)->exists();
     }
 }

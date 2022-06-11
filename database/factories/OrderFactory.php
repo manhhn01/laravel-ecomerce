@@ -14,8 +14,8 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            'status' => rand(0, 3),
-            'shipping_date' => $this->faker->dateTimeThisYear()
+            'address_id' => 0,
+            'payment_method' => $this->faker->randomElement(['momo', 'cod']),
         ];
     }
 }

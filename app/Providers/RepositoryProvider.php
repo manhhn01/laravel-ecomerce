@@ -18,6 +18,8 @@ use App\Repositories\ProductVariants\ProductVariantsRepository;
 use App\Repositories\ProductVariants\ProductVariantsRepositoryInterface;
 use App\Repositories\ResetPasswords\ResetPasswordRepository;
 use App\Repositories\ResetPasswords\ResetPasswordRepositoryInterface;
+use App\Repositories\Users\UserRepository;
+use App\Repositories\Users\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryProvider extends ServiceProvider
@@ -31,6 +33,7 @@ class RepositoryProvider extends ServiceProvider
         CartProductRepositoryInterface::class => CartProductRepository::class,
         OptionRepositoryInterface::class => OptionRepository::class,
         OAuthProviderRepositoryInterface::class => OAuthProviderRepository::class,
+        UserRepositoryInterface::class => UserRepository::class,
     ];
 
     /**

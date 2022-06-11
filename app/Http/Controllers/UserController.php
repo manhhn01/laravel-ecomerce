@@ -2,18 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Collections\UserPaginationCollection;
+use App\Http\Resources\Front\UserResource;
+use App\Repositories\Users\UserRepositoryInterface;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    protected $userRepo;
+
+    public function __construct(UserRepositoryInterface $userRepo)
+    {
+        $this->userRepo  = $userRepo;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $filterNames = [];
+        return new UserPaginationCollection($this->userRepo->filterAndPage(
+            $filterNames,
+            $request->query('perpage', 30),
+            $request->query('sortby', 'created_at'),
+            $request->query('order', 'desc')
+        ));
     }
 
     /**

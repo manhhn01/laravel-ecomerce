@@ -16,10 +16,11 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('address_id')->constrained();
             $table->foreignId('coupon_id')->nullable()->constrained();
             $table->tinyInteger('status')->default(0);
+            $table->decimal('shipping_fee', 15, 2);
             $table->string('payment_method');
             $table->string('payment_signature')->nullable();
             $table->unsignedBigInteger('request_id')->nullable();
