@@ -161,7 +161,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 
     public function filterAndPage($filters, $perPage = 30, $sortBy = 'created_at', $order = 'desc')
     {
-        $orders = $this->model->with('address.ward.district.province', 'buyer', 'orderProducts')->orderBy($sortBy, $order);
+        $orders = $this->model->with('address.ward.district.province', 'buyer', 'orderProducts.product')->orderBy($sortBy, $order);
         if (!empty($filters)) {
             //todo
         }

@@ -16,6 +16,7 @@ class OrderFactory extends Factory
         return [
             'address_id' => 0,
             'payment_method' => $this->faker->randomElement(['momo', 'cod']),
+            'shipping_fee' => $this->faker->numberBetween(0, 10) * 1000,
         ];
     }
 }

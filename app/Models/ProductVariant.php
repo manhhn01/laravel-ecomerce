@@ -11,7 +11,7 @@ class ProductVariant extends Model
     use HasFactory;
 
     protected $fillable = [
-        'sku', 'price', 'sale_price', 'quantity'
+        'sku', 'quantity', 'cover', 'color_id', 'size_id'
     ];
 
     protected $with = [
@@ -28,8 +28,8 @@ class ProductVariant extends Model
 
     protected $casts = [
         'quantity' => 'integer',
-        'color_id'=> 'integer',
-        'size_id'=>'integer'
+        'color_id' => 'integer',
+        'size_id' => 'integer'
     ];
 
     public function product()

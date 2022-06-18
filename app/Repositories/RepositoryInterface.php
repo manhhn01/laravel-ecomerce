@@ -27,6 +27,12 @@ interface RepositoryInterface
     public function create($attributes);
 
     /**
+     * @param array $attributesArray
+     * @return array
+     */
+    public function createMany($attributesArray);
+
+    /**
      * update with id.
      * @param $id
      * @param $attributes

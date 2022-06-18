@@ -50,7 +50,6 @@ class AddressController extends Controller
 
         $user->addresses()->findOrFail($id)->delete();
 
-
         return AddressResource::collection($user->addresses->load('ward.district.province'));
     }
 

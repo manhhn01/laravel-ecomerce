@@ -5,6 +5,7 @@ namespace App\Repositories\Products;
 use App\Exceptions\TableConstraintException;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Repositories\BaseRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -15,83 +16,37 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return Product::class;
     }
 
-    public function create($attributes)
+    public function createVariants($product, $attributesArray)
     {
-        if ($attributes['category'] == 'add') {
-            $category = Category::create([
-                'name' => $attributes['new_category'],
-                'description' => 'Danh mục ' . $attributes['new_category'],
-            ]);
-            $attributes['category'] = $category->id;
-        }
-
-        $product = parent::create([
-            'name' => $attributes['name'],
-            'description' => $attributes['description'],
-            'price' => $attributes['price'],
-            'status' => $attributes['status'],
-            'sku' => $attributes['sku'],
-            'quantity' => $attributes['quantity'],
-            'category_id' => $attributes['category'],
-        ]);
-
-        if (!empty($attributes['images'])) {
-            $product->images()->createMany($attributes['images']);
-        }
+        return $product->variants()->createMany($attributesArray);
     }
 
-    public function update($id, $attributes)
+    public function createImages($product, $attributesArray)
     {
-        $product = $this->model->findOrFail($id);
-
-        if ($attributes['brand'] == 'add') {
-            $brand = Brand::create([
-                'name' => $attributes['new_brand'],
-                'description' => 'Danh mục ' . $attributes['new_brand'],
-            ]);
-            $attributes['brand'] = $brand->id;
-        }
-
-        if ($attributes['category'] == 'add') {
-            $category = Category::create([
-                'name' => $attributes['new_category'],
-                'description' => 'Danh mục ' . $attributes['new_category'],
-            ]);
-            $attributes['category'] = $category->id;
-        }
-
-        $product->update(
-            [
-                'name' => $attributes['name'],
-                'description' => $attributes['description'],
-                'brand_id' => $attributes['brand'],
-                'price' => $attributes['price'],
-                'status' => $attributes['status'],
-                'sku' => $attributes['sku'],
-                'quantity' => $attributes['quantity'],
-                'category_id' => $attributes['category'],
-            ]
-        );
-
-        if (!empty($attributes['images'])) {
-            $product->images()->delete();
-            $product->images()->createMany($attributes['images']);
-        }
+        return $product->images()->createMany($attributesArray);
     }
 
-    public function delete($id)
+    public function updateVariants($product, $attributesArr)
     {
-        $product = $this->find($id);
-        if ($product->orders()->exists()) {
-            throw new TableConstraintException('Sản phẩm đã có trong đơn hàng, không thể xóa');
-        }
-        if ($product->receivedNotes()->exists()) {
-            throw new TableConstraintException('Sản phẩm đã có trong phiếu nhập, không thể xóa');
-        }
-        parent::delete($id);
+        $variantIds = collect($attributesArr)->map(function ($variantAttributes) use ($product) {
+            if (!isset($variantAttributes['id'])) {
+                $variant = $product->variants()->create($variantAttributes);
+                $variantAttributes['id'] = $variant->id;
+            } else {
+                $variant = $product->variants()->find($variantAttributes['id']);
+                if (!empty($variant)) {
+                    $variant->update($variantAttributes);
+                }
+            }
+            return $variantAttributes['id'];
+        });
+        $product->variants()->whereNotIn('id', $variantIds)->delete();
     }
 
-    /* ------ */
+    public function updateImages($product, $attributesArr)
+    {
+        //
+    }
 
     public function productsFilter($productsQuery, $filters)
     {

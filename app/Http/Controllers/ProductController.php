@@ -2,24 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductDestroyRequest;
+use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\Front\Collections\ProductPaginationCollection;
+use App\Http\Resources\ProductShowResource;
+use App\Models\Image;
 use App\Models\Product;
-use App\Repositories\Brands\BrandRepositoryInterface;
-use App\Repositories\Categories\CategoryRepositoryInterface;
 use App\Repositories\Products\ProductRepositoryInterface;
+use App\Repositories\ProductVariants\ProductVariantsRepositoryInterface;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     protected $productRepo;
     protected $categoryRepo;
+    protected $variantRepo;
 
     public function __construct(
         ProductRepositoryInterface $productRepo,
-        CategoryRepositoryInterface $category
+        ProductVariantsRepositoryInterface $variantRepo,
     ) {
         $this->productRepo = $productRepo;
-        $this->categoryRepo = $category;
+        $this->variantRepo = $variantRepo;
     }
 
     /**
@@ -35,27 +41,9 @@ class ProductController extends Controller
                 $request->only($filterNames),
                 $request->query('perpage', 30),
                 $request->query('sortby', 'created_at'),
-                $request->query('order', 'desc')
+                $request->query('order', 'desc'),
+                false
             )
-        );
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $categories = $this->categoryRepo->all();
-        $brands = $this->brandRepo->all();
-
-        return view(
-            'admin.product.create',
-            [
-                'categories' => $categories,
-                'brands' => $brands,
-            ]
         );
     }
 
@@ -65,9 +53,21 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
-        dd($request->all());
+        $attributes = $request->all();
+        $product = $this->productRepo->create($attributes);
+        try {
+            $this->productRepo->createVariants($product, $attributes['variants']);
+            $this->productRepo->createImages($product, $attributes['images']);
+        } catch (QueryException $e) {
+            $product->delete();
+            throw $e;
+        }
+        return new ProductShowResource(
+            $product
+                ->load('images', 'categoryWithParent', 'publicReviews.user', 'publicReviews.likes', 'variants', 'tags')
+        );
     }
 
     /**
@@ -76,20 +76,14 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(Product $product, $id_slug)
     {
-        //
-    }
+        $product = $this->productRepo->findByIdOrSlug($id_slug);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
+        return new ProductShowResource(
+            $product
+                ->load('images', 'categoryWithParent', 'publicReviews.user', 'publicReviews.likes', 'variants', 'tags')
+        );
     }
 
     /**
@@ -99,9 +93,21 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductUpdateRequest $request, $id_slug)
     {
-        //
+        $product = $this->productRepo->findByIdOrSlug($id_slug);
+        $attributes = $request->all();
+        $product->update($attributes);
+        if (isset($attributes['variants'])) {
+            $this->productRepo->updateVariants($product, $attributes['variants']);
+        }
+        if (isset($attributes['images'])) {
+            $this->productRepo->updateImages($product, $attributes['images']);
+        }
+        return new ProductShowResource(
+            $product
+                ->load('images', 'categoryWithParent', 'publicReviews.user', 'publicReviews.likes', 'variants', 'tags')
+        );
     }
 
     /**
@@ -110,8 +116,12 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(ProductDestroyRequest $request, $id_slug)
     {
-        //
+        $product = $this->productRepo->findByIdOrSlug($id_slug);
+        $product->delete();
+        return new ProductPaginationCollection(
+            $this->productRepo->filterAndPage([], [], [], [], false)
+        );
     }
 }

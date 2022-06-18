@@ -10,9 +10,8 @@ use Laravel\Scout\Searchable;
 class Product extends Model
 {
     use HasFactory, Searchable, StatusScope;
-    protected $fillable = ['name', 'slug', 'description', 'status'];
+    protected $fillable = ['name', 'price', 'sale_price', 'slug', 'description', 'status', 'cover'];
     protected $hidden = ['category_id'];
-    protected $with = ['reviews'];
     protected $appends = ['rating_avg', 'options', 'wished'];
     protected $casts = [
         'price' => 'float',

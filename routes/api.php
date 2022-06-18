@@ -116,28 +116,34 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [LoginController::class, 'login']);
 
     // Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-        /* PRODUCT */
-        Route::resource('products', ProductController::class);
-        //size
-        //color
+    /* PRODUCT */
+    Route::prefix('/products')->group(function () {
+        Route::get('/', [ProductController::class, 'index']);
+        Route::post('/', [ProductController::class, 'store']);
+        Route::get('/{id_slug}', [ProductController::class, 'show']);
+        Route::patch('/{id_slug}', [ProductController::class, 'update']);
+        Route::delete('/{id_slug}', [ProductController::class, 'destroy']);
+    });
+    //size
+    //color
 
-        /* CATEGORY */
+    /* CATEGORY */
 
-        /* ORDER */
-        Route::resource('orders', OrderController::class);
+    /* ORDER */
+    Route::resource('orders', OrderController::class);
 
-        /* RECEIVED NOTE */
+    /* RECEIVED NOTE */
 
-        /* USER */
-        Route::resource('users', UserController::class);
-        //role
-        //permission
+    /* USER */
+    Route::resource('users', UserController::class);
+    //role
+    //permission
 
-        /* REVIEW */
+    /* REVIEW */
 
-        /* SHOP MANAGE */
-        //slide
-        //logo
-        //...
+    /* SHOP MANAGE */
+    //slide
+    //logo
+    //...
     // });
 });
