@@ -31,7 +31,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        return new UserShowResource($user->load('orders'));
+        return new UserShowResource($user->load(['orders', 'addresses']));
     }
 
     public function update(Request $request, User $user)

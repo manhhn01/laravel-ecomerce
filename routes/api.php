@@ -154,7 +154,7 @@ Route::prefix('admin')->group(function () {
     //permission
 
     /* REVIEW */
-    Route::resource('reviews', ReviewController::class)->except(['create', 'store']);
+    Route::resource('reviews', ReviewController::class)->except(['create', 'store', 'edit']);
 
     /* SHOP MANAGE */
     //slide

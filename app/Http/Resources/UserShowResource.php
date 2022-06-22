@@ -26,6 +26,7 @@ class UserShowResource extends JsonResource
             'phone' => $this->phone,
             'dob' => $this->dob,
             'orders' => $this->whenLoaded('orders'),
+            'addresses' => $this->whenLoaded('addresses'),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

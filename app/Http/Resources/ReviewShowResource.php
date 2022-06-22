@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\Front\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReviewIndexResource extends JsonResource
+class ReviewShowResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +16,13 @@ class ReviewIndexResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'user' => $this->whenLoaded('user', new UserIndexResource($this->user)),
+            'id' => $this->id,
             'rating' => $this->rating,
             'comment' => $this->comment,
-            'status' => $this->status,
+            'likes_count' => $this->likes->count(),
+            'user' => $this->whenLoaded('user', new UserShowResource($this->user)),
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
         ];
     }
 }

@@ -13,7 +13,7 @@ class Review extends Model
     protected $hidden = ['product_id', 'user_id'];
 
     protected $fillable = [
-        'comment', 'rating', 'user_id'
+        'comment', 'rating', 'user_id', 'status'
     ];
 
     protected $appends = ['liked'];
