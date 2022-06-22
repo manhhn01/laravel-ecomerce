@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Front\Collections;
+namespace App\Http\Resources\Collections;
 
-use App\Http\Resources\Front\ProductIndexResource;
 use App\Http\Resources\PaginationCollection;
+use App\Http\Resources\UserIndexResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Http\Resources\Json\ResourceResponse;
 
 class ProductPaginationCollection extends PaginationCollection
 {
@@ -18,11 +17,11 @@ class ProductPaginationCollection extends PaginationCollection
     public function toArray($request)
     {
         return [
-            'data' => ProductIndexResource::collection($this->collection),
+            'data' => UserIndexResource::collection($this->collection),
             'current_page' => $this->currentPage(),
             'last_page' => $this->lastPage(),
             'per_page' => intval($this->perPage()),
-            'products_count' => $this->total(),
+            'users_count' => $this->total(),
         ];
     }
 }

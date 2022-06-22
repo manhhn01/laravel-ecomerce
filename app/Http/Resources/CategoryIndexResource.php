@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Front;
+namespace App\Http\Resources;
 
-use App\Http\Resources\Collections\ProductPaginationCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryShowResource extends JsonResource
+class CategoryIndexResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,12 +17,10 @@ class CategoryShowResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'cover' => $this->cover,
             'slug' => $this->slug,
             'description' => $this->description,
-            'cover' => $this->cover,
-            'products' => new ProductPaginationCollection($this->when(isset($this->products), $this->products)),
             'children' => $this->whenLoaded('children'),
-            'parent' => $this->parent,
         ];
     }
 }

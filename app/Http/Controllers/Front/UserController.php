@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Front\UserUpdateRequest;
 use App\Http\Requests\ImageUploadRequest;
 use App\Http\Resources\Front\UserResource;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;

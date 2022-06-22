@@ -1,13 +1,16 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front;
 use App\Http\Controllers\Front\Auth\ResetPasswordController;
 use App\Http\Controllers\Front\OAuthController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -115,8 +118,13 @@ Route::get('/addresses/child_divisions', [Front\AddressController::class, 'child
 Route::prefix('admin')->group(function () {
     Route::post('/login', [LoginController::class, 'login']);
 
-    // Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    /* IMAGE */
+    Route::prefix('/upload')->group(function () {
+        Route::post('/products', [ImageController::class, 'product']);
+    });
+
     /* PRODUCT */
+    // Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::prefix('/products')->group(function () {
         Route::get('/', [ProductController::class, 'index']);
         Route::post('/', [ProductController::class, 'store']);
@@ -124,10 +132,15 @@ Route::prefix('admin')->group(function () {
         Route::patch('/{id_slug}', [ProductController::class, 'update']);
         Route::delete('/{id_slug}', [ProductController::class, 'destroy']);
     });
-    //size
-    //color
+
+    /* SIZE */
+    Route::resource('sizes', SizeController::class)->except(['edit', 'create']);
+
+    /* COLOR */
+    Route::resource('colors', ColorController::class)->except(['edit', 'create']);
 
     /* CATEGORY */
+    Route::resource('categories', CategoryController::class)->except(['edit', 'create']);
 
     /* ORDER */
     Route::resource('orders', OrderController::class);
@@ -135,7 +148,7 @@ Route::prefix('admin')->group(function () {
     /* RECEIVED NOTE */
 
     /* USER */
-    Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class)->except(['create', 'store']);
     //role
     //permission
 

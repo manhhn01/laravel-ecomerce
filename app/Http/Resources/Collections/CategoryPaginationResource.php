@@ -2,13 +2,13 @@
 
 namespace App\Http\Resources\Collections;
 
-use App\Http\Resources\OrderResource;
+use App\Http\Resources\CategoryIndexResource;
 use App\Http\Resources\PaginationCollection;
 
-class OrderPaginationCollection extends PaginationCollection
+class CategoryPaginationResource extends PaginationCollection
 {
     /**
-     * Transform the resource collection into an array.
+     * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
@@ -16,11 +16,11 @@ class OrderPaginationCollection extends PaginationCollection
     public function toArray($request)
     {
         return [
-            'data' => OrderResource::collection($this->collection),
+            'data' => CategoryIndexResource::collection($this->collection),
             'current_page' => $this->currentPage(),
             'last_page' => $this->lastPage(),
             'per_page' => intval($this->perPage()),
-            'orders_count' => $this->total(),
+            'category_count' => $this->total(),
         ];
     }
 }

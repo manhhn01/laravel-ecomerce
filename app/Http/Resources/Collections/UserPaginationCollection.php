@@ -3,10 +3,9 @@
 namespace App\Http\Resources\Collections;
 
 use App\Http\Resources\Front\UserResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Http\Resources\Json\ResourceResponse;
+use App\Http\Resources\PaginationCollection;
 
-class UserPaginationCollection extends ResourceCollection
+class UserPaginationCollection extends PaginationCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -23,10 +22,5 @@ class UserPaginationCollection extends ResourceCollection
             'per_page' => intval($this->perPage()),
             'users_count' => $this->total(),
         ];
-    }
-
-    public function toResponse($request)
-    {
-        return (new ResourceResponse($this))->toResponse($request);
     }
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Collections\UserPaginationCollection;
 use App\Http\Resources\Front\UserResource;
+use App\Http\Resources\UserShowResource;
+use App\Models\User;
 use App\Repositories\Users\UserRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -13,13 +15,9 @@ class UserController extends Controller
 
     public function __construct(UserRepositoryInterface $userRepo)
     {
-        $this->userRepo  = $userRepo;
+        $this->userRepo = $userRepo;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
         $filterNames = [];
@@ -31,69 +29,20 @@ class UserController extends Controller
         ));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function show(User $user)
     {
-        //
+        return new UserShowResource($user->load('orders'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function update(Request $request, User $user)
     {
-        //
+        $user->update($request->all());
+        return $user;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function destroy(User $user)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $user->delete();
+        return response()->json(['message' => 'Xóa thành công']);
     }
 }

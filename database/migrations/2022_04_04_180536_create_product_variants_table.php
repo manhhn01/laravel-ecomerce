@@ -21,8 +21,8 @@ class CreateProductVariantsTable extends Migration
             $table->smallInteger('quantity');
             $table->string('cover');
 
-            $table->foreignId('color_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('size_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('color_id')->constrained();
+            $table->foreignId('size_id')->constrained();
 
             $table->timestamps();
         });

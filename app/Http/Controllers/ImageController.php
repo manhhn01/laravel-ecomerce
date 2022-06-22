@@ -2,84 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Image;
-use Illuminate\Http\Request;
+use App\Http\Requests\ImageUploadRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Http\UploadedFile;
+use InvalidArgumentException;
+use Intervention\Image\Facades\Image;
+use Storage;
 
 class ImageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function product(ImageUploadRequest $request)
     {
-        //
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            return response()->json([
+                'filename' => $this->storeFile($file, 'images/products/', [360, 480]),
+            ]);
+        } else {
+            $fileResponse = [];
+            foreach ($request->file('images') as $file) {
+                $fileResponse[] =  $this->storeFile($file, 'images/products/', [360, 480]);
+            }
+            return response()->json([
+                'filenames' => $fileResponse
+            ]);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param UploadedFile $file
+     * @param string $path
+     * @param array $size
+     * @param int $quality
+     * @param string $format
+     * @return JsonResponse
+     * @throws InvalidArgumentException
+     * @throws BindingResolutionException
      */
-    public function store(Request $request)
+    protected function storeFile($file, $path, $size = [300, 300], $quality = 90, $format = 'jpg')
     {
-        //
+        $filePath = $this->filename($file, $path);
+        Image::make($file)
+            ->fit($size[0], $size[1])
+            ->save(
+                Storage::disk('public')->path($filePath),
+                $quality,
+                $format
+            );
+        return $filePath;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Image $image)
+    protected function filename($file, $path)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Image $image)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Image $image)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Image $image)
-    {
-        //
+        $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        return $path . $fileName . '|' . time() . '.jpg';
     }
 }
