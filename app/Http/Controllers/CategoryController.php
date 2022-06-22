@@ -20,7 +20,7 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-        return new CategoryPaginationResource(Category::paginate($request->query('perpage', 30)));
+        return new CategoryPaginationResource(Category::with('parent')->paginate($request->query('perpage', 30)));
     }
 
     public function store(Request $request)

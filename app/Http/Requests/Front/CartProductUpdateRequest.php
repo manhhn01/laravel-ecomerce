@@ -16,7 +16,7 @@ class CartProductUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'products' => ['required', 'array', 'min:1'],
+            'products' => ['nullable', 'array', 'min:0'],
             'products.*' => [resolve(VariantQuantity::class)],
             'products.*.product_variant_id' => ['required', 'exists:product_variants,id', 'distinct', new VariantPublic],
             'products.*.quantity' => ['nullable', 'integer', 'min:1'],

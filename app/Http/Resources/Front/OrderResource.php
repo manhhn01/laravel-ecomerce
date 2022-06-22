@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Front;
 
-use App\Http\Resources\Front\CartProductResource;
-use App\Http\Resources\Front\ProductIndexResource;
-use App\Http\Resources\Front\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderShowResource extends JsonResource
+class OrderResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,12 +16,10 @@ class OrderShowResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'buyer' => new UserResource($this->buyer, 'any'),
             'shipping_address' => $this->address->address,
             'province' => $this->address->ward->district->province->name,
             'district' => $this->address->ward->district->name,
             'ward' => $this->address->ward->name,
-            'phone' => $this->address->phone,
             'status' => $this->status,
             'shipped_date' => $this->shipped_date,
             'total_price' => $this->totalPrice,
@@ -32,9 +27,6 @@ class OrderShowResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'payment_method' => $this->payment_method,
-            'request_id' => $this->request_id,
-            'payment_signature' => $this->payment_signature,
-            'order_products' => OrderProductResource::collection($this->orderProducts)
         ];
     }
 }

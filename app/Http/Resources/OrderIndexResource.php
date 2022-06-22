@@ -16,6 +16,7 @@ class OrderIndexResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'buyer' => new UserResource($this->buyer, 'any'),
             'shipping_address' => $this->address->address,
             'province' => $this->address->ward->district->province->name,

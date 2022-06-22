@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->foreignId('address_id')->constrained();
             $table->foreignId('coupon_id')->nullable()->constrained();
             $table->tinyInteger('status')->default(0);
-            $table->decimal('shipping_fee', 15, 2);
+            $table->decimal('shipping_fee', 15, 2)->default(0);
             $table->string('payment_method');
             $table->string('payment_signature')->nullable();
             $table->unsignedBigInteger('request_id')->nullable();

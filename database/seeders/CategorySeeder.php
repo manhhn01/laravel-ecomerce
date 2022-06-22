@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 
 class CategorySeeder extends Seeder
@@ -22,7 +23,7 @@ class CategorySeeder extends Seeder
         $categoryNames = ['Nam', 'Nữ', 'Trẻ em'];
         $categoriesChild = [$male, $female, $kid];
         foreach ($categoryNames as $index => $categoryName) {
-            Category::factory(['name' => $categoryName])->create()
+            Category::factory(['name' => $categoryName, 'slug' => Str::slug($categoryName)])->create()
                 ->children()->saveMany(
                     collect($categoriesChild[$index])
                         ->map(function ($name) {

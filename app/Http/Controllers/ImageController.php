@@ -30,6 +30,16 @@ class ImageController extends Controller
         }
     }
 
+    public function avatar(ImageUploadRequest $request)
+    {
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            return response()->json([
+                'filename' => $this->storeFile($file, 'images/users/', [400, 480]),
+            ]);
+        }
+    }
+
 
     /**
      * @param UploadedFile $file

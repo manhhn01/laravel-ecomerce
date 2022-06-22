@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Front\Collections\OrderPaginationCollection;
 use App\Models\Address;
 use App\Models\Order;
 use App\Models\ProductVariant;
@@ -24,6 +25,13 @@ class OrderController extends Controller
         $this->orderRepo = $orderRepo;
         $this->cartRepo = $cartRepo;
     }
+
+    public function index(Request $request)
+    {
+        $user = auth('sanctum')->user();
+        return new OrderPaginationCollection($user->orders()->paginate($request->query('perpage', 30)));
+    }
+
     //todo validate request
     public function store(Request $request)
     {
@@ -41,14 +49,30 @@ class OrderController extends Controller
             $payment_method = $request->payment_method;
 
             $order = Order::create([
-                'id' => time(),
                 'address_id' => $address->id,
-                'payment_method' => $payment_method
+                'payment_method' => $payment_method,
             ]);
         } else {
-            $attributes = $request->only(['address_id', 'coupon_id', 'payment_method']);
-            $order = $user->orders()->create($attributes);
-            $products = $this->cartRepo->getUserCart($user);
+            if ($request->address_id === 'new') {
+                $address = Address::create($request->only(['phone', 'lat', 'lon', 'ward_id', 'address', 'first_name', 'last_name']));
+                if ($request->saveAddress == true) {
+                    $user->addresses()->save($address);
+                }
+                $order = $user->orders()->create([
+                    'address_id' => $address->id,
+                    'payment_method' => $request->payment_method,
+                ]);
+            } else {
+                $attributes = $request->only(['address_id', 'payment_method']);
+                $order = $user->orders()->create($attributes);
+            }
+            $products = collect($request->cart)->map(function ($product) {
+                $variant = ProductVariant::find($product['variant_id']);
+                if (!empty($variant)) {
+                    $variant->pivot = (object) ['quantity' => $product['cart_quantity']];
+                    return $variant;
+                }
+            });
         }
 
         $order->orderProducts()->sync($products->mapWithKeys(function ($variant) {
@@ -97,10 +121,9 @@ class OrderController extends Controller
             if ($request->signature === $order->signature && $order->status == 0) {
                 $order->update(['status' => 1]);
             };
+            return view('order.momo-redirect', ['status' => 'success', 'error' => '']);
         }
-        dd("ok");
-
-        //todo return sendMessage view
+        return view('order.momo-redirect', ['status' => 'error', 'error' => 'Không tìm thấy đơn hàng']);
     }
 
     public function momoIpn(Request $request)

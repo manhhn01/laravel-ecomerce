@@ -22,7 +22,7 @@ class ReviewResource extends JsonResource
             'liked' => $this->liked,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'author' => new UserResource($this->user)
+            'author' => new UserResource($this->user, 'any')
         ];
     }
 }

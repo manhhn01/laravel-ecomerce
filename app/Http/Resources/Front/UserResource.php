@@ -28,7 +28,7 @@ class UserResource extends JsonResource
             'full_name' => $this->whenAppended('full_name'),
             'email' => $this->email,
             'gender' => $this->gender,
-            'avatar' => $this->when($this->type !== 'password' || $this->type !== 'any', $this->provider_avatar, $this->avatar),
+            'avatar' => $this->when($this->type === 'password' || $this->type === 'any', $this->avatar, $this->provider_avatar),
             'provider_avatar' => $this->provider_avatar,
             'phone' => $this->phone,
             'dob' => $this->dob,

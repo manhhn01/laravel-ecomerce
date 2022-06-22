@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ColorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front;
@@ -67,7 +68,7 @@ Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
     /* INFO */
     Route::get('/', [Front\UserController::class, 'show']);
     Route::patch('/', [Front\UserController::class, 'update']);
-    Route::post('/avatar', [Front\UserController::class, 'uploadAvatar']);
+    Route::post('/upload/avatar', [ImageController::class, 'avatar']);
 
     /* CART */
     Route::prefix('/cart')->group(function () {
@@ -95,6 +96,11 @@ Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
         //todo remove below
         Route::get('/child_divisions', [Front\AddressController::class, 'childDivisionsList']);
     });
+
+    /* ORDERS */
+    Route::prefix('/orders')->group(function(){
+        Route::get('/', [Front\OrderController::class, 'index']);
+    });
 });
 
 /* PAYMENT */
@@ -102,7 +108,7 @@ Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
 Route::prefix('/checkout')->group(function () {
     Route::post('/', [Front\OrderController::class, 'store']);
 });
-Route::prefix('/payment/')->group(function () {
+Route::prefix('/payment')->group(function () {
     Route::get('/momo/redirect', [Front\OrderController::class, 'momoRedirect'])->name('momo.redirect');
     Route::post('/momo/notify', [Front\OrderController::class, 'momoIpn'])->name('momo.ipn');
 });
