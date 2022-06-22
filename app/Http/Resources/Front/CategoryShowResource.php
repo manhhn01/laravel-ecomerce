@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Front;
 
-use App\Http\Resources\Collections\ProductPaginationCollection;
+use App\Http\Resources\Front\Collections\ProductPaginationCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CategoryShowResource extends JsonResource

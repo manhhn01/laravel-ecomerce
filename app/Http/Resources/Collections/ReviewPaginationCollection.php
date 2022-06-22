@@ -3,10 +3,10 @@
 namespace App\Http\Resources\Collections;
 
 use App\Http\Resources\PaginationCollection;
-use App\Http\Resources\UserIndexResource;
+use App\Http\Resources\ReviewIndexResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ProductPaginationCollection extends PaginationCollection
+class ReviewPaginationCollection extends PaginationCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -17,11 +17,11 @@ class ProductPaginationCollection extends PaginationCollection
     public function toArray($request)
     {
         return [
-            'data' => UserIndexResource::collection($this->collection),
+            'data' => ReviewIndexResource::collection($this->collection),
             'current_page' => $this->currentPage(),
             'last_page' => $this->lastPage(),
             'per_page' => intval($this->perPage()),
-            'users_count' => $this->total(),
+            'orders_count' => $this->total(),
         ];
     }
 }

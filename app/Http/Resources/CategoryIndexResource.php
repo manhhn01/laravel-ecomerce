@@ -20,7 +20,11 @@ class CategoryIndexResource extends JsonResource
             'cover' => $this->cover,
             'slug' => $this->slug,
             'description' => $this->description,
+            'parent_id' => $this->parent_id,
             'children' => $this->whenLoaded('children'),
+            'parent' => $this->whenLoaded('parent'),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }

@@ -44,9 +44,10 @@ interface CategoryRepositoryInterface extends RepositoryInterface
      * @param int $perPage
      * @param string $sortBy
      * @param string $order
+     * @param bool $onlyPublic
      * @return Collection
      */
-    public function allProductsPage($category, $filters, $perPage = 30, $sortBy = 'created_at', $order = 'desc');
+    public function allProductsPage($category, $filters, $perPage = 30, $sortBy = 'created_at', $order = 'desc', $onlyPublic = true);
 
     /**
      * @param Builder $productsQuery

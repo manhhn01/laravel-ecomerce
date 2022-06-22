@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Collections;
 
-use App\Http\Resources\OrderResource;
+use App\Http\Resources\OrderIndexResource;
 use App\Http\Resources\PaginationCollection;
 
 class OrderPaginationCollection extends PaginationCollection
@@ -16,7 +16,7 @@ class OrderPaginationCollection extends PaginationCollection
     public function toArray($request)
     {
         return [
-            'data' => OrderResource::collection($this->collection),
+            'data' => OrderIndexResource::collection($this->collection),
             'current_page' => $this->currentPage(),
             'last_page' => $this->lastPage(),
             'per_page' => intval($this->perPage()),

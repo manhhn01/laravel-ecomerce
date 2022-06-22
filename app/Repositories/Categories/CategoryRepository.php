@@ -39,10 +39,10 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         });
     }
 
-    public function allProductsPage($category, $filters, $perPage = 30, $sortBy = 'created_at', $order = 'desc')
+    public function allProductsPage($category, $filters, $perPage = 30, $sortBy = 'created_at', $order = 'desc', $onlyPublic = true)
     {
         $categoryIds = $category->children->pluck('id')->merge([$category->id]);
-        $products =  Product::status(1)
+        $products = Product::status($onlyPublic ? 1 : 0)
             ->with('variants')
             ->whereIn('category_id', $categoryIds);
 

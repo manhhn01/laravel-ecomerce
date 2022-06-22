@@ -10,6 +10,7 @@ use App\Http\Controllers\Front\OAuthController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
 
@@ -143,7 +144,7 @@ Route::prefix('admin')->group(function () {
     Route::resource('categories', CategoryController::class)->except(['edit', 'create']);
 
     /* ORDER */
-    Route::resource('orders', OrderController::class);
+    Route::resource('orders', OrderController::class)->except(['edit', 'create']);
 
     /* RECEIVED NOTE */
 
@@ -153,6 +154,7 @@ Route::prefix('admin')->group(function () {
     //permission
 
     /* REVIEW */
+    Route::resource('reviews', ReviewController::class)->except(['create', 'store']);
 
     /* SHOP MANAGE */
     //slide

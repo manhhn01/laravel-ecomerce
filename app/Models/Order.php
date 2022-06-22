@@ -17,6 +17,7 @@ class Order extends Model
         'payment_method',
         'payment_signature',
         'request_id',
+        'status'
     ];
 
     public function buyer()
