@@ -18,7 +18,7 @@ class LoginController extends Controller
             if (Auth::attempt($request->only(['email', 'password']))) {
                 $request->session()->regenerate();
                 $request->session()->put('login_type', 'password');
-                return response('', 204);
+                return response(auth()->check(), 200);
             } else throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);

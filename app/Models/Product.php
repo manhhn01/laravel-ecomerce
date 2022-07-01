@@ -75,7 +75,7 @@ class Product extends Model
 
     public function getCoverAttribute($value)
     {
-        return asset("storage/$value");
+        return config('app.url') . "/api/$value";
     }
 
     public function getOptionsAttribute()
