@@ -31,6 +31,7 @@ Route::middleware('web')->group(function () {
     Route::get('/auth/{provider}/redirect', [OAuthController::class, 'redirect']);
     Route::get('/auth/{provider}/cb', [OAuthController::class, 'handleCallback']);
 });
+Route::get('/images/{image}', [ImageController::class, 'show'])->where('image', '(.*)');;
 /* HOME PAGE */
 Route::get('/banners', [Front\HomeController::class, 'banners']);
 Route::get('/home_nav', [Front\HomeController::class, 'nav']);

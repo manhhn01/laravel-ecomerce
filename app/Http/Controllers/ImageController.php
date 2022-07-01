@@ -40,6 +40,15 @@ class ImageController extends Controller
         }
     }
 
+    public function show(string $image)
+    {
+        if (Storage::disk('public')->exists("images/$image")) {
+            return Image::make(Storage::disk('public')->get("images/$image"))->resize(300, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->response();
+        } else abort(500);
+    }
+
 
     /**
      * @param UploadedFile $file
