@@ -28,6 +28,6 @@ class Image extends Model
 
     public function getImageAttribute($value)
     {
-        return config('app.url') . "/api/$value";
+        return config('app.product_image_url') . "/$value";
     }
 }
