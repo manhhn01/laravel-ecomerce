@@ -52,7 +52,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://localhost:8000'),
+
+    'product_image_url' => env('APP_PRODUCT_IMAGE_URL', 'http://localhost:8000/api/'),
 
     'asset_url' => env('ASSET_URL', null),
 

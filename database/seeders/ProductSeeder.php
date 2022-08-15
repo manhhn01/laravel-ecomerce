@@ -48,7 +48,8 @@ class ProductSeeder extends Seeder
             $product = Product::factory([
                 'name' => $productData['name'],
                 'slug' => $productData['slug'],
-                'cover' => 'images/products/' . basename(parse_url($productData['cover'], PHP_URL_PATH)),
+                // 'cover' => 'images/products/' . basename(parse_url($productData['cover'], PHP_URL_PATH)),
+                'cover' => basename(parse_url($productData['cover'], PHP_URL_PATH)),
                 'description' => $productData['description'],
                 'price' => $productData['price'],
                 'sale_price' => $productData['sale_price']
@@ -71,7 +72,8 @@ class ProductSeeder extends Seeder
                         'id' => $productVariant['id'],
                         'sku' => $productVariant['sku'],
                         'quantity' => $productVariant['quantity'],
-                        'cover' => 'images/products/' . basename(parse_url($productVariant['cover'], PHP_URL_PATH)),
+                        // 'cover' => 'images/products/' . basename(parse_url($productVariant['cover'], PHP_URL_PATH)),
+                        'cover' => basename(parse_url($productVariant['cover'], PHP_URL_PATH)),
                     ])
                         ->for($product)
                         ->for($color)
@@ -81,7 +83,8 @@ class ProductSeeder extends Seeder
             }
 
             foreach ($productData['images'] as $productImage) {
-                Image::factory(['image' => 'images/products/' . basename(parse_url($productImage, PHP_URL_PATH))])->for($product, 'imageable')->create();
+                // Image::factory(['image' => 'images/products/' . basename(parse_url($productImage, PHP_URL_PATH))])->for($product, 'imageable')->create();
+                Image::factory(['image' => basename(parse_url($productImage, PHP_URL_PATH))])->for($product, 'imageable')->create();
             }
         }
     }
